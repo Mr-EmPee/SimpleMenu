@@ -27,6 +27,10 @@ public abstract class Pane {
   private Item[] currentItems;
 
   protected Pane(int length, int height) {
+    if (length <= 0 || height <= 0) {
+      throw new IllegalArgumentException("Length and Height must be greater then 0");
+    }
+
     this.length = length;
     this.height = height;
     this.paneItems = new Item[height * length];
@@ -56,6 +60,9 @@ public abstract class Pane {
     return Optional.ofNullable(getItems()[slot]);
   }
 
+  /**
+   * Refresh the visible items inside the pane
+   */
   public void refresh() {
     currentItems = new Item[paneItems.length];
     for (int i = 0; i < paneItems.length; i++) {
