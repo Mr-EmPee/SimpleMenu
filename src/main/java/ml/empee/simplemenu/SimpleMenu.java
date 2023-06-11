@@ -1,29 +1,39 @@
 package ml.empee.simplemenu;
 
-import lombok.Getter;
-import ml.empee.ioc.SimpleIoC;
-import ml.empee.simplemenu.utils.Logger;
+import ml.empee.simplemenu.handlers.InventoryCloseHandler;
+import ml.empee.simplemenu.handlers.InventoryInteractHandler;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Boot class of this plugin.
+ * Access class of the library
  **/
 
-public final class SimpleMenu extends JavaPlugin {
+public final class SimpleMenu extends JavaPlugin implements CommandExecutor {
 
-  @Getter
-  private final SimpleIoC iocContainer = new SimpleIoC(this);
+  @Override
+  public void onEnable() {
+    init(this);
+    getCommand("sm").setExecutor(this);
+  }
+
+  @Override
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    new TestGui(((Player) sender)).open();
+    return true;
+  }
 
   /**
    * Called when enabling the plugin
    */
-  public void onEnable() {
-    Logger.setPrefix("SimpleMenu");
+  public void init(JavaPlugin plugin) {
+    var pm = plugin.getServer().getPluginManager();
 
-    iocContainer.initialize("relocations");
+    pm.registerEvents(new InventoryCloseHandler(plugin), plugin);
+    pm.registerEvents(new InventoryInteractHandler(), plugin);
   }
 
-  public void onDisable() {
-    iocContainer.removeAllBeans(true);
-  }
 }
