@@ -22,7 +22,6 @@ public class ScrollPane extends Pane {
   private int totalRows;
 
   private boolean vertical;
-  private List<Slot> blacklistedDisplaySlots;
 
   private int currentCol = 0;
   private int currentRow = 0;
