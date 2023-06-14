@@ -1,6 +1,6 @@
-package ml.empee.simplemenu.model.content.menus;
+package ml.empee.simplemenu.model.menus;
 
-import ml.empee.simplemenu.model.content.pane.StaticPane;
+import ml.empee.simplemenu.model.pane.StaticPane;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

@@ -1,4 +1,4 @@
-package ml.empee.simplemenu.model.content;
+package ml.empee.simplemenu.model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
