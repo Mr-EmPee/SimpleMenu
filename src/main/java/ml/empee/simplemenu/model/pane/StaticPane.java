@@ -1,6 +1,6 @@
-package ml.empee.simplemenu.model.content.pane;
+package ml.empee.simplemenu.model.pane;
 
-import ml.empee.simplemenu.model.content.GItem;
+import ml.empee.simplemenu.model.GItem;
 
 /**
  * Section that allows you to put items by specifying their position

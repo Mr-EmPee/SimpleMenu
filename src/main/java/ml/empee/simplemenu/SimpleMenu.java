@@ -1,7 +1,5 @@
 package ml.empee.simplemenu;
 
-import ml.empee.simplemenu.handlers.InventoryCloseHandler;
-import ml.empee.simplemenu.handlers.InventoryInteractHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -16,8 +14,7 @@ public final class SimpleMenu {
   public void init(JavaPlugin plugin) {
     var pm = plugin.getServer().getPluginManager();
 
-    pm.registerEvents(new InventoryCloseHandler(plugin), plugin);
-    pm.registerEvents(new InventoryInteractHandler(), plugin);
+    pm.registerEvents(new InventoryHandler(plugin), plugin);
   }
 
 }

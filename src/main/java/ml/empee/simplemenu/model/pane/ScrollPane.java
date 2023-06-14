@@ -1,8 +1,7 @@
-package ml.empee.simplemenu.model.content.pane;
+package ml.empee.simplemenu.model.pane;
 
-import ml.empee.simplemenu.model.content.GItem;
-import ml.empee.simplemenu.model.content.Mask;
-import ml.empee.simplemenu.model.content.Slot;
+import ml.empee.simplemenu.model.Mask;
+import ml.empee.simplemenu.model.GItem;
 
 import java.util.List;
 
