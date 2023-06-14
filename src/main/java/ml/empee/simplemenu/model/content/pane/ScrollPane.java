@@ -1,8 +1,10 @@
 package ml.empee.simplemenu.model.content.pane;
 
-import ml.empee.simplemenu.model.content.Item;
+import ml.empee.simplemenu.model.content.GItem;
 import ml.empee.simplemenu.model.content.Mask;
+import ml.empee.simplemenu.model.content.Slot;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,11 +18,12 @@ import java.util.List;
 
 public class ScrollPane extends Pane {
 
-  private Item[][] columns;
+  private GItem[][] columns;
   private int totalCols;
   private int totalRows;
 
-  boolean vertical;
+  private boolean vertical;
+  private List<Slot> blacklistedDisplaySlots;
 
   private int currentCol = 0;
   private int currentRow = 0;
@@ -44,19 +47,19 @@ public class ScrollPane extends Pane {
     totalRows = columns[0].length;
   }
 
-  public void setRows(List<Item> items, int maxCols) {
+  public void setRows(List<GItem> items, int maxCols) {
     setItems(items, maxCols, (int) Math.ceil(items.size() / (double) maxCols));
   }
 
-  public void setRows(List<Item> items) {
+  public void setRows(List<GItem> items) {
     setRows(items, getLength());
   }
 
-  public void setCols(List<Item> items, int maxRows) {
+  public void setCols(List<GItem> items, int maxRows) {
     setItems(items, (int) Math.ceil(items.size() / (double) maxRows), maxRows);
   }
 
-  public void setCols(List<Item> items) {
+  public void setCols(List<GItem> items) {
     setCols(items, getHeight());
   }
 
@@ -66,14 +69,14 @@ public class ScrollPane extends Pane {
    * @param totalCols max columns that the pane will have
    * @param totalRows max rows that the pane will have
    */
-  public void setItems(List<Item> items, int totalCols, int totalRows) {
+  public void setItems(List<GItem> items, int totalCols, int totalRows) {
     if (totalCols * totalRows < items.size()) {
       throw new IllegalArgumentException("Items doesn't fit into the pane");
     }
 
     this.totalCols = totalCols;
     this.totalRows = totalRows;
-    this.columns = new Item[totalCols][totalRows];
+    this.columns = new GItem[totalCols][totalRows];
 
     if (vertical) {
       populateItemsVertically(items);
@@ -82,7 +85,7 @@ public class ScrollPane extends Pane {
     }
   }
 
-  private void populateItemsVertically(List<Item> items) {
+  private void populateItemsVertically(List<GItem> items) {
     int index = 0;
     for (int col = 0; col < totalCols; col++) {
       for (int row = 0; row < totalRows; row++) {
@@ -95,7 +98,7 @@ public class ScrollPane extends Pane {
     }
   }
 
-  private void populateItemsHorizontally(List<Item> items) {
+  private void populateItemsHorizontally(List<GItem> items) {
     int index = 0;
     for (int row = 0; row < totalRows; row++) {
       for (int col = 0; col < totalCols; col++) {

@@ -20,10 +20,10 @@ public class Mask {
   /**
    * Apply the mask to the given item matrix
    */
-  public Item[][] applyMask(@NonNull Item[][] columns, boolean vertical) {
-    List<List<Item>> items = new ArrayList<>(
+  public GItem[][] applyMask(@NonNull GItem[][] columns, boolean vertical) {
+    List<List<GItem>> items = new ArrayList<>(
         Arrays.stream(columns)
-            .map(l -> (List<Item>) new ArrayList(Arrays.asList(l)))
+            .map(l -> (List<GItem>) new ArrayList(Arrays.asList(l)))
             .toList()
     );
 
@@ -40,11 +40,11 @@ public class Mask {
     }
 
     return items.stream()
-        .map(c -> c.toArray(new Item[items.get(0).size()]))
-        .toList().toArray(new Item[0][0]);
+        .map(c -> c.toArray(new GItem[items.get(0).size()]))
+        .toList().toArray(new GItem[0][0]);
   }
 
-  private static void applyMaskHorizontally(List<List<Item>> items, String[] mask) {
+  private static void applyMaskHorizontally(List<List<GItem>> items, String[] mask) {
     for (int row = 0; row < items.get(0).size(); row++) {
       for (int col = 0; col < items.size(); col++) {
         String maskLine = mask[row % mask.length];
@@ -57,9 +57,9 @@ public class Mask {
     }
   }
 
-  private void applyMaskVertically(List<List<Item>> items, String[] mask) {
+  private void applyMaskVertically(List<List<GItem>> items, String[] mask) {
     for (int col = 0; col < items.size(); col++) {
-      List<Item> column = items.get(col);
+      List<GItem> column = items.get(col);
       for (int row = 0; row < column.size(); row++) {
         String maskLine = mask[row % mask.length];
         if (maskLine.charAt(col % maskLine.length()) != '0') {
@@ -71,7 +71,7 @@ public class Mask {
     }
   }
 
-  private static void shiftDown(List<List<Item>> items, int targetCol, int targetRow) {
+  private static void shiftDown(List<List<GItem>> items, int targetCol, int targetRow) {
     int col = items.size() - 1;
     if (col == 0 || items.get(col).size() == items.get(col - 1).size()) {
       items.add(new ArrayList<>());
@@ -85,12 +85,12 @@ public class Mask {
         col -= 1;
         row = items.get(col).size() - 1;
 
-        Item item = items.get(col).get(row);
+        GItem item = items.get(col).get(row);
         items.get(col + 1).set(0, item);
       } else {
         row -= 1;
 
-        Item item = items.get(col).get(row);
+        GItem item = items.get(col).get(row);
         items.get(col).set(row + 1, item);
       }
     }
@@ -98,7 +98,7 @@ public class Mask {
     items.get(targetCol).set(targetRow, null);
   }
 
-  private static void shiftRight(List<List<Item>> items, int targetCol, int targetRow) {
+  private static void shiftRight(List<List<GItem>> items, int targetCol, int targetRow) {
     int col = findSmallestCol(items);
     items.get(col).add(null);
 
@@ -108,12 +108,12 @@ public class Mask {
         col = items.size() - 1;
         row -= 1;
 
-        Item item = items.get(col).get(row);
+        GItem item = items.get(col).get(row);
         items.get(0).set(row + 1, item);
       } else {
         col -= 1;
 
-        Item item = items.get(col).get(row);
+        GItem item = items.get(col).get(row);
         items.get(col + 1).set(row, item);
       }
     }
@@ -124,7 +124,7 @@ public class Mask {
   /**
    * @return the col index with the smallest number of rows, 0 if not found
    */
-  private static int findSmallestCol(List<List<Item>> items) {
+  private static int findSmallestCol(List<List<GItem>> items) {
     int col = items.size() - 1;
     while (col > 0) {
       if (items.get(col).size() < items.get(col - 1).size()) {
