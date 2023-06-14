@@ -7,7 +7,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * An inventory view that contains a menu
@@ -21,27 +20,27 @@ public class MenuView extends InventoryView {
   private final Inventory topInventory;
 
   @Override
-  public @NotNull Inventory getTopInventory() {
+  public Inventory getTopInventory() {
     return topInventory;
   }
 
   @Override
-  public @NotNull Inventory getBottomInventory() {
+  public Inventory getBottomInventory() {
     return menu.getPlayer().getInventory();
   }
 
   @Override
-  public @NotNull HumanEntity getPlayer() {
+  public HumanEntity getPlayer() {
     return menu.getPlayer();
   }
 
   @Override
-  public @NotNull InventoryType getType() {
+  public InventoryType getType() {
     return topInventory.getType();
   }
 
   @Override
-  public @NotNull String getTitle() {
+  public String getTitle() {
     return menu.getTitle();
   }
 }
