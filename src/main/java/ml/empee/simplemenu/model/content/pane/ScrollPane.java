@@ -4,7 +4,6 @@ import ml.empee.simplemenu.model.content.GItem;
 import ml.empee.simplemenu.model.content.Mask;
 import ml.empee.simplemenu.model.content.Slot;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,13 +35,13 @@ public class ScrollPane extends Pane {
     vertical = true;
   }
 
-  public void applyMask(String... input) {
+  public void applyMask(String... mask) {
     if (columns == null) {
       throw new IllegalStateException("Set the items before applying a mask!");
     }
 
-    Mask mask = new Mask(input);
-    columns = mask.applyMask(columns, vertical);
+    Mask maskFormatter = new Mask(mask);
+    columns = maskFormatter.applyMask(columns, vertical);
     totalCols = columns.length;
     totalRows = columns[0].length;
   }
