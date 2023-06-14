@@ -1,8 +1,8 @@
-package ml.empee.simplemenu.model.content.pane;
+package ml.empee.simplemenu.model.pane;
 
 import lombok.Getter;
-import ml.empee.simplemenu.model.content.GItem;
-import ml.empee.simplemenu.model.content.Slot;
+import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Slot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
