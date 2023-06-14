@@ -53,7 +53,7 @@ public abstract class Pane {
    * @param row relative to pane (starting from 0)
    */
   public void addPane(int col, int row, Pane pane) {
-    subPanes.put(pane, new Slot(col, row));
+    subPanes.put(pane, Slot.of(col, row));
   }
 
   public final Optional<Item> getItem(int slot) {
@@ -110,7 +110,7 @@ public abstract class Pane {
           continue;
         }
 
-        target[toSlot(col + offset.col(), row + offset.row())] = item;
+        target[toSlot(col + offset.getCol(), row + offset.getRow())] = item;
       }
     }
   }
