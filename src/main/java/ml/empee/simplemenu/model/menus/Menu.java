@@ -3,14 +3,12 @@ package ml.empee.simplemenu.model.menus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import ml.empee.simplemenu.InventoryHandler;
 import ml.empee.simplemenu.model.pane.StaticPane;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -42,14 +40,13 @@ public abstract class Menu {
   }
 
   public final void open() {
-    InventoryHandler.registerInventory(player.getUniqueId(), this);
-    player.openInventory(topInventory);
+    onOpen();
 
     topInventory.setContents(topPane.getContents());
-    player.updateInventory();
+    InventoryHandler.registerInventory(player.openInventory(topInventory), this);
   }
 
-  public void onOpen(InventoryOpenEvent event) {
+  public void onOpen() {
 
   }
 

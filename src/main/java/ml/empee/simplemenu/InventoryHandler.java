@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -25,11 +26,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InventoryHandler implements Listener {
 
-  private static final Map<UUID, Menu> inventories = new HashMap<>();
+  private static final Map<InventoryView, Menu> inventories = new HashMap<>();
   private final JavaPlugin plugin;
 
-  public static void registerInventory(UUID owner, Menu view) {
-    inventories.put(owner, view);
+  public static void registerInventory(InventoryView view, Menu menu) {
+    inventories.put(view, menu);
   }
 
   @EventHandler
@@ -51,28 +52,18 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClose(InventoryCloseEvent event) {
-    Menu menu = inventories.get(event.getPlayer().getUniqueId());
+    Menu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
 
     menu.onClose(event);
-    inventories.remove(event.getPlayer().getUniqueId());
-  }
-
-  @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-  public void onInventoryOpen(InventoryOpenEvent event) {
-    Menu menu = inventories.get(event.getPlayer().getUniqueId());
-    if (menu == null) {
-      return;
-    }
-
-    menu.onOpen(event);
+    inventories.remove(event.getView());
   }
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
-    Menu menu = inventories.get(event.getWhoClicked().getUniqueId());
+    Menu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
@@ -88,7 +79,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryDrag(InventoryDragEvent event) {
-    Menu menu = inventories.get(event.getWhoClicked().getUniqueId());
+    Menu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
