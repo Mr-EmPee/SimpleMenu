@@ -6,7 +6,12 @@ import ml.empee.simplemenu.model.content.Mask;
 import java.util.List;
 
 /**
- * Pane that is paginated
+ * You can think of this pane as window that look upon
+ * a matrix of items.
+ * <br><br>
+ * The length and height is the size of the window, but the matrix can be much bugger then that.
+ * This class offers methods to control which subset of the items display at the window and other
+ * useful method like a way to apply a mask to the matrix.
  */
 
 public class ScrollPane extends Pane {
@@ -55,6 +60,12 @@ public class ScrollPane extends Pane {
     setCols(items, getHeight());
   }
 
+  /**
+   * Populate the pane
+   *
+   * @param totalCols max columns that the pane will have
+   * @param totalRows max rows that the pane will have
+   */
   public void setItems(List<Item> items, int totalCols, int totalRows) {
     if (totalCols * totalRows < items.size()) {
       throw new IllegalArgumentException("Items doesn't fit into the pane");

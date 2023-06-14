@@ -84,6 +84,9 @@ public abstract class Pane {
     return currentItems;
   }
 
+  /**
+   * @return the contents of the pane
+   */
   public ItemStack[] getContents() {
     var items = getItems();
     ItemStack[] itemStacks = new ItemStack[items.length];
