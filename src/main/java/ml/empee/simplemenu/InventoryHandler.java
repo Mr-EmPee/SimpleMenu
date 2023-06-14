@@ -1,7 +1,7 @@
 package ml.empee.simplemenu;
 
 import lombok.RequiredArgsConstructor;
-import ml.empee.simplemenu.model.menus.MenuView;
+import ml.empee.simplemenu.model.menus.Menu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,10 +25,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InventoryHandler implements Listener {
 
-  private static final Map<UUID, MenuView> inventories = new HashMap<>();
+  private static final Map<UUID, Menu.Meta> inventories = new HashMap<>();
   private final JavaPlugin plugin;
 
-  public static void registerInventory(UUID owner, MenuView view) {
+  public static void registerInventory(UUID owner, Menu.Meta view) {
     inventories.put(owner, view);
   }
 
@@ -51,7 +51,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClose(InventoryCloseEvent event) {
-    MenuView menu = inventories.get(event.getPlayer().getUniqueId());
+    Menu.Meta menu = inventories.get(event.getPlayer().getUniqueId());
     if (menu == null) {
       return;
     }
@@ -62,7 +62,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryOpen(InventoryOpenEvent event) {
-    MenuView menu = inventories.get(event.getPlayer().getUniqueId());
+    Menu.Meta menu = inventories.get(event.getPlayer().getUniqueId());
     if (menu == null) {
       return;
     }
@@ -72,7 +72,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
-    MenuView menu = inventories.get(event.getWhoClicked().getUniqueId());
+    Menu.Meta menu = inventories.get(event.getWhoClicked().getUniqueId());
     if (menu == null) {
       return;
     }
@@ -88,7 +88,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryDrag(InventoryDragEvent event) {
-    MenuView menu = inventories.get(event.getWhoClicked().getUniqueId());
+    Menu.Meta menu = inventories.get(event.getWhoClicked().getUniqueId());
     if (menu == null) {
       return;
     }

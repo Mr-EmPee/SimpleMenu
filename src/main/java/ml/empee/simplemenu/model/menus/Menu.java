@@ -3,6 +3,7 @@ package ml.empee.simplemenu.model.menus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import ml.empee.simplemenu.InventoryHandler;
 import ml.empee.simplemenu.model.pane.StaticPane;
 import org.bukkit.entity.Player;
@@ -41,10 +42,11 @@ public abstract class Menu {
   }
 
   public final void open() {
-    topInventory.setContents(topPane.getContents());
-
-    InventoryHandler.registerInventory(player.getUniqueId(), MenuView.of(this, topInventory));
+    InventoryHandler.registerInventory(player.getUniqueId(), Meta.of(this, topInventory));
     player.openInventory(topInventory);
+
+    topInventory.setContents(topPane.getContents());
+    player.updateInventory();
   }
 
   public void onOpen(InventoryOpenEvent event) {
@@ -61,6 +63,16 @@ public abstract class Menu {
 
   public void onDrag(InventoryDragEvent event) {
     event.setCancelled(true);
+  }
+
+  /**
+   * Contains metadata of a menu
+   */
+  @Value
+  @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PACKAGE)
+  public static class Meta {
+    Menu menu;
+    Inventory topInventory;
   }
 
 }
