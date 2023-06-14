@@ -1,7 +1,7 @@
 package ml.empee.simplemenu.model.content.pane;
 
 import lombok.Getter;
-import ml.empee.simplemenu.model.content.Item;
+import ml.empee.simplemenu.model.content.GItem;
 import ml.empee.simplemenu.model.content.Slot;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,8 +23,8 @@ public abstract class Pane {
 
   private final Map<Pane, Slot> subPanes = new HashMap<>();
 
-  protected Item[] paneItems;
-  private Item[] currentItems;
+  protected GItem[] paneItems;
+  private GItem[] currentItems;
 
   protected Pane(int length, int height) {
     if (length <= 0 || height <= 0) {
@@ -33,7 +33,7 @@ public abstract class Pane {
 
     this.length = length;
     this.height = height;
-    this.paneItems = new Item[height * length];
+    this.paneItems = new GItem[height * length];
   }
 
   public Map<Pane, Slot> getSubPanes() {
@@ -53,10 +53,10 @@ public abstract class Pane {
    * @param row relative to pane (starting from 0)
    */
   public void addPane(int col, int row, Pane pane) {
-    subPanes.put(pane, new Slot(col, row));
+    subPanes.put(pane, Slot.of(col, row));
   }
 
-  public final Optional<Item> getItem(int slot) {
+  public final Optional<GItem> getItem(int slot) {
     return Optional.ofNullable(getItems()[slot]);
   }
 
@@ -64,7 +64,7 @@ public abstract class Pane {
    * Refresh the visible items inside the pane
    */
   public void refresh() {
-    currentItems = new Item[paneItems.length];
+    currentItems = new GItem[paneItems.length];
     for (int i = 0; i < paneItems.length; i++) {
       var item = paneItems[i];
       if (item != null && item.isVisible()) {
@@ -76,7 +76,7 @@ public abstract class Pane {
     subPanes.forEach((pane, offset) -> importItemsFromPane(pane, offset, currentItems));
   }
 
-  public Item[] getItems() {
+  public GItem[] getItems() {
     if (currentItems == null) {
       refresh();
     }
@@ -101,16 +101,16 @@ public abstract class Pane {
     return itemStacks;
   }
 
-  private void importItemsFromPane(Pane pane, Slot offset, Item[] target) {
+  private void importItemsFromPane(Pane pane, Slot offset, GItem[] target) {
     var items = pane.getItems();
     for (int col = 0; col < pane.getLength(); col++) {
       for (int row = 0; row < pane.getHeight(); row++) {
-        Item item = items[pane.toSlot(col, row)];
+        GItem item = items[pane.toSlot(col, row)];
         if (item == null) {
           continue;
         }
 
-        target[toSlot(col + offset.col(), row + offset.row())] = item;
+        target[toSlot(col + offset.getCol(), row + offset.getRow())] = item;
       }
     }
   }

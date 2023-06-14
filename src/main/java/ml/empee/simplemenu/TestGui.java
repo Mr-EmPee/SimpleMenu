@@ -1,5 +1,6 @@
 package ml.empee.simplemenu;
 
+import ml.empee.simplemenu.model.content.GItem;
 import ml.empee.simplemenu.model.content.Item;
 import ml.empee.simplemenu.model.content.menus.ChestMenu;
 import ml.empee.simplemenu.model.content.pane.StaticPane;
@@ -16,8 +17,8 @@ class TestGui extends ChestMenu {
 
   @Override
   public void onOpen(InventoryOpenEvent event) {
-    top().setItem(2, 0, Item.of(Material.ARMOR_STAND));
-    top().setItem(4, 2, Item.builder()
+    top().setItem(2, 0, GItem.of(Material.ARMOR_STAND));
+    top().setItem(4, 2, GItem.builder()
         .itemstack(new ItemStack(Material.COAL))
         .clickHandler(e -> {
           player.sendMessage("Opped!");
@@ -26,8 +27,8 @@ class TestGui extends ChestMenu {
         })
         .build()
     );
-    top().setItem(5, 1, Item.of(new ItemStack(Material.BARRIER, 2)));
-    top().setItem(8, 3, Item.of(Material.DIAMOND, 4));
+    top().setItem(5, 1, GItem.of(new ItemStack(Material.BARRIER, 2)));
+    top().setItem(8, 3, GItem.of(Material.DIAMOND, 4));
 
     top().addPane(4, 1, buildSubPane());
   }
@@ -35,7 +36,7 @@ class TestGui extends ChestMenu {
   private StaticPane buildSubPane() {
     var pane = new StaticPane(3, 3);
 
-    pane.setItem(0, 1, Item.builder()
+    pane.setItem(0, 1, GItem.builder()
         .itemstack(new ItemStack(Material.STONE))
         .visibilityHandler(player::isOp)
         .clickHandler(e -> {
@@ -44,7 +45,7 @@ class TestGui extends ChestMenu {
           refresh();
         }).build()
     );
-    pane.setItem(2, 2, Item.of(new ItemStack(Material.BLACK_STAINED_GLASS)));
+    pane.setItem(2, 2, GItem.of(new ItemStack(Material.BLACK_STAINED_GLASS)));
 
     return pane;
   }

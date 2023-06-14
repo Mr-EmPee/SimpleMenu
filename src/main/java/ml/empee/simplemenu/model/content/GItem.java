@@ -21,21 +21,21 @@ import java.util.function.Supplier;
 @Builder
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor(staticName = "empty")
-public class Item {
+public class GItem {
 
   private ItemStack itemstack;
   private Consumer<InventoryClickEvent> clickHandler;
   private Supplier<Boolean> visibilityHandler;
 
-  public static Item of(ItemStack item) {
+  public static GItem of(ItemStack item) {
     return of(item, null, null);
   }
 
-  public static Item of(Material item) {
+  public static GItem of(Material item) {
     return of(new ItemStack(item), null, null);
   }
 
-  public static Item of(Material item, int amount) {
+  public static GItem of(Material item, int amount) {
     return of(new ItemStack(item, amount), null, null);
   }
 

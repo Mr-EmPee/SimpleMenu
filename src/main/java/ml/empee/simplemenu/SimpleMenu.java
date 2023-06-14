@@ -22,7 +22,7 @@ public final class SimpleMenu extends JavaPlugin implements CommandExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    new TestPaginatedGui(((Player) sender)).open();
+    new TestHorizontalScrollGui(((Player) sender)).open();
     return true;
   }
 
