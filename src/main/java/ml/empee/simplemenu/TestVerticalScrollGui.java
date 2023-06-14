@@ -1,8 +1,8 @@
 package ml.empee.simplemenu;
 
-import ml.empee.simplemenu.model.content.GItem;
-import ml.empee.simplemenu.model.content.menus.ChestMenu;
-import ml.empee.simplemenu.model.content.pane.ScrollPane;
+import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.menus.ChestMenu;
+import ml.empee.simplemenu.model.pane.ScrollPane;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;

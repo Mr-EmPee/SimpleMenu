@@ -1,7 +1,5 @@
 package ml.empee.simplemenu;
 
-import ml.empee.simplemenu.handlers.InventoryCloseHandler;
-import ml.empee.simplemenu.handlers.InventoryInteractHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,8 +30,7 @@ public final class SimpleMenu extends JavaPlugin implements CommandExecutor {
   public void init(JavaPlugin plugin) {
     var pm = plugin.getServer().getPluginManager();
 
-    pm.registerEvents(new InventoryCloseHandler(plugin), plugin);
-    pm.registerEvents(new InventoryInteractHandler(), plugin);
+    pm.registerEvents(new InventoryHandler(plugin), plugin);
   }
 
 }
