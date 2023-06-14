@@ -1,5 +1,3 @@
-import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-
 plugins {
   id("org.gradle.java-library")
   id("org.gradle.checkstyle")
@@ -8,24 +6,11 @@ plugins {
   id("com.github.johnrengelman.shadow") version "8.1.0"
 
   id("io.papermc.paperweight.userdev") version "1.5.2"
-  id("xyz.jpenilla.run-paper") version "2.0.1"
-  id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
 }
 
 group = "ml.empee"
 version = "1.0.0-SNAPSHOT"
 var basePackage = "ml.empee.simplemenu"
-
-bukkit {
-  load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
-  main = "${basePackage}.SimpleMenu"
-  commands {
-    register("sm")
-  }
-  apiVersion = "1.13"
-  depend = listOf()
-  authors = listOf("Mr. EmPee")
-}
 
 repositories {
   maven("https://jitpack.io")
@@ -43,7 +28,7 @@ tasks {
   }
 
   shadowJar {
-    isEnableRelocation = false
+    isEnableRelocation = true
     relocationPrefix = "$basePackage.relocations"
   }
 
