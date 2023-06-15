@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.Mr-EmPee"
-version = "0.0.1"
+version = "0.0.3"
 var basePackage = "ml.empee.simplemenu"
 
 repositories {
