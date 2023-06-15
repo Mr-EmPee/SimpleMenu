@@ -1,7 +1,7 @@
 package ml.empee.simplemenu.model.pane;
 
-import ml.empee.simplemenu.model.Mask;
 import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Mask;
 
 import java.util.List;
 
@@ -124,19 +124,19 @@ public class ScrollPane extends Pane {
   }
 
   public boolean hasNextCol() {
-    return currentCol + getLength() != totalCols;
+    return currentCol + getLength() < totalCols;
   }
 
   public boolean hasNextRow() {
-    return currentRow + getHeight() != totalRows;
+    return currentRow + getHeight() < totalRows;
   }
 
   public boolean hasPreviousCol() {
-    return currentCol != 0;
+    return currentCol > 0;
   }
 
   public boolean hasPreviousRow() {
-    return currentRow != 0;
+    return currentRow > 0;
   }
 
   public void nextCol(int offset) {
@@ -144,7 +144,7 @@ public class ScrollPane extends Pane {
       throw new IllegalArgumentException("Unable to skip 0 or less cols");
     }
 
-    currentCol += offset;
+    setCol(currentCol + offset);
   }
 
   public void nextRow(int offset) {
@@ -152,7 +152,15 @@ public class ScrollPane extends Pane {
       throw new IllegalArgumentException("Unable to skip 0 or less rows");
     }
 
-    currentRow += offset;
+    setRow(currentRow + offset);
+  }
+
+  public void setCol(int col) {
+    this.currentCol = col;
+  }
+
+  public void setRow(int row) {
+    this.currentRow = row;
   }
 
   public void nextCol() {
