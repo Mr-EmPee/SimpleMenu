@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class ChestMenu extends InventoryMenu {
 
-  public ChestMenu(Player player, String title, int rows) {
+  public ChestMenu(Player player, int rows, String title) {
     super(
         player, title, Bukkit.createInventory(player, rows * 9, title), new StaticPane(9, rows)
     );
