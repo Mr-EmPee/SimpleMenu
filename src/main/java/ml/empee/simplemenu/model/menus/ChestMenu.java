@@ -8,12 +8,11 @@ import org.bukkit.entity.Player;
  * Menu that is of Chest GUI type
  */
 
-public class ChestMenu extends Menu {
+public class ChestMenu extends InventoryMenu {
 
   public ChestMenu(Player player, String title, int rows) {
     super(
-        player, title, Bukkit.createInventory(player, rows * 9, title),
-        new StaticPane(9, rows)
+        player, title, Bukkit.createInventory(player, rows * 9, title), new StaticPane(9, rows)
     );
   }
 

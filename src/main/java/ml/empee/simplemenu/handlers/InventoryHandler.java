@@ -1,7 +1,7 @@
-package ml.empee.simplemenu;
+package ml.empee.simplemenu.handlers;
 
 import lombok.RequiredArgsConstructor;
-import ml.empee.simplemenu.model.menus.Menu;
+import ml.empee.simplemenu.model.menus.InventoryMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,14 +10,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Handle operations of menus
@@ -26,10 +24,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InventoryHandler implements Listener {
 
-  private static final Map<InventoryView, Menu> inventories = new HashMap<>();
+  private static final Map<InventoryView, InventoryMenu> inventories = new HashMap<>();
   private final JavaPlugin plugin;
 
-  public static void registerInventory(InventoryView view, Menu menu) {
+  public static void registerInventory(InventoryView view, InventoryMenu menu) {
     inventories.put(view, menu);
   }
 
@@ -52,7 +50,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClose(InventoryCloseEvent event) {
-    Menu menu = inventories.get(event.getView());
+    InventoryMenu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
@@ -63,7 +61,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
-    Menu menu = inventories.get(event.getView());
+    InventoryMenu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
@@ -79,7 +77,7 @@ public class InventoryHandler implements Listener {
 
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryDrag(InventoryDragEvent event) {
-    Menu menu = inventories.get(event.getView());
+    InventoryMenu menu = inventories.get(event.getView());
     if (menu == null) {
       return;
     }
