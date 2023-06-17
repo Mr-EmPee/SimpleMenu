@@ -1,5 +1,6 @@
 package ml.empee.simplemenu.model.pane;
 
+import lombok.Getter;
 import ml.empee.simplemenu.model.GItem;
 import ml.empee.simplemenu.model.Mask;
 
@@ -17,12 +18,20 @@ import java.util.List;
 public class ScrollPane extends Pane {
 
   private GItem[][] columns;
+
+  @Getter
   private int totalCols;
+
+  @Getter
   private int totalRows;
 
+  @Getter
   private boolean vertical;
 
+  @Getter
   private int currentCol = 0;
+
+  @Getter
   private int currentRow = 0;
 
   public ScrollPane(int length, int height) {
@@ -115,7 +124,12 @@ public class ScrollPane extends Pane {
     int index = 0;
     for (int row = 0; row < getHeight(); row++) {
       for (int col = 0; col < getLength(); col++) {
-        paneItems[index] = columns[currentCol + col][currentRow + row];
+        if (currentCol + col >= totalCols || currentRow + row >= totalRows) {
+          paneItems[index] = null;
+        } else {
+          paneItems[index] = columns[currentCol + col][currentRow + row];
+        }
+
         index += 1;
       }
     }
