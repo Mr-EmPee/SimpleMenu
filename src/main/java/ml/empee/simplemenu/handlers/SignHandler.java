@@ -4,8 +4,10 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import lombok.RequiredArgsConstructor;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import ml.empee.simplemenu.model.menus.SignMenu;
+import ml.empee.simplemenu.utility.ServerVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -16,13 +18,17 @@ import java.util.UUID;
  * Handle sign operations
  */
 
-@RequiredArgsConstructor
 public class SignHandler {
 
   private static final Map<UUID, SignMenu> signs = new HashMap<>();
 
-  private final PacketListener packetListener = new PacketListener();
+  private final PacketListener packetListener;
   private final JavaPlugin plugin;
+
+  public SignHandler(JavaPlugin plugin) {
+    this.plugin = plugin;
+    packetListener = new PacketListener();
+  }
 
   public void registerProtocolLibListeners() {
     ProtocolLibrary.getProtocolManager().addPacketListener(packetListener);
@@ -33,7 +39,8 @@ public class SignHandler {
   }
 
   public void onSignClose(SignMenu menu, String[] outputText) {
-    menu.onClose(outputText);
+    menu.setText(outputText);
+    menu.onClose();
   }
 
   public static void registerSign(UUID player, SignMenu menu) {
@@ -54,7 +61,19 @@ public class SignHandler {
       }
 
       event.setCancelled(true);
-      onSignClose(sign, event.getPacket().getStringArrays().read(0));
+
+      String[] result;
+      if (ServerVersion.isGreaterThan(1, 9)) {
+        result = event.getPacket().getStringArrays().read(0);
+      } else {
+        result = new String[4];
+        WrappedChatComponent[] text = event.getPacket().getChatComponentArrays().read(0);
+        for (int i = 0; i < result.length; i++) {
+          result[i] = text[i].getJson();
+        }
+      }
+
+      Bukkit.getScheduler().runTask(plugin, () -> onSignClose(sign, result));
     }
   }
 

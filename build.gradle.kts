@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.Mr-EmPee"
-version = "0.0.3"
+version = "0.0.4"
 var basePackage = "ml.empee.simplemenu"
 
 repositories {
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+  compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
   compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0")
 }
 
