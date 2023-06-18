@@ -45,6 +45,8 @@ public class ScrollPane extends Pane {
   public void applyMask(String... mask) {
     if (columns == null) {
       throw new IllegalStateException("Set the items before applying a mask!");
+    } else if (totalCols == 0 && totalRows == 0) {
+      return;
     }
 
     Mask maskFormatter = new Mask(mask);
