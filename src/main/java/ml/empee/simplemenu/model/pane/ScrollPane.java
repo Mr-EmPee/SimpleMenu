@@ -25,8 +25,7 @@ public class ScrollPane extends Pane {
   @Getter
   private int totalRows;
 
-  @Getter
-  private boolean vertical;
+  private boolean verticalFilling;
 
   @Getter
   private int currentCol = 0;
@@ -38,8 +37,12 @@ public class ScrollPane extends Pane {
     super(length, height);
   }
 
-  public void setVertical() {
-    vertical = true;
+  public void fillVertically() {
+    verticalFilling = true;
+  }
+
+  public boolean hasVerticalFilling() {
+    return verticalFilling;
   }
 
   public void applyMask(String... mask) {
@@ -50,7 +53,7 @@ public class ScrollPane extends Pane {
     }
 
     Mask maskFormatter = new Mask(mask);
-    columns = maskFormatter.applyMask(columns, vertical);
+    columns = maskFormatter.applyMask(columns, verticalFilling);
     totalCols = columns.length;
     totalRows = columns[0].length;
   }
@@ -86,7 +89,7 @@ public class ScrollPane extends Pane {
     this.totalRows = totalRows;
     this.columns = new GItem[totalCols][totalRows];
 
-    if (vertical) {
+    if (verticalFilling) {
       populateItemsVertically(items);
     } else {
       populateItemsHorizontally(items);
