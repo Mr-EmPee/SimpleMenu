@@ -33,6 +33,8 @@ public class ScrollPane extends Pane {
   @Getter
   private int currentRow = 0;
 
+  private String[] mask;
+
   public ScrollPane(int length, int height) {
     super(length, height);
   }
@@ -45,7 +47,7 @@ public class ScrollPane extends Pane {
     return verticalFilling;
   }
 
-  public void applyMask(String... mask) {
+  private void applyMask() {
     if (columns == null) {
       throw new IllegalStateException("Set the items before applying a mask!");
     } else if (totalCols == 0 && totalRows == 0) {
@@ -56,6 +58,19 @@ public class ScrollPane extends Pane {
     columns = maskFormatter.applyMask(columns, verticalFilling);
     totalCols = columns.length;
     totalRows = columns[0].length;
+  }
+
+  public void setMask(String... mask) {
+    this.mask = mask;
+    if (isEmpty()) {
+      return;
+    }
+
+    applyMask();
+  }
+
+  public boolean isEmpty() {
+    return columns == null || (totalCols == 0 && totalRows == 0);
   }
 
   public void setRows(List<GItem> items, int maxCols) {
@@ -93,6 +108,10 @@ public class ScrollPane extends Pane {
       populateItemsVertically(items);
     } else {
       populateItemsHorizontally(items);
+    }
+
+    if (mask != null) {
+      applyMask();
     }
   }
 
