@@ -19,13 +19,17 @@ import java.util.function.Supplier;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-@NoArgsConstructor(staticName = "empty")
 public class GItem {
 
   private ItemStack itemstack;
   private Consumer<InventoryClickEvent> clickHandler;
   private Supplier<Boolean> visibilityHandler;
+
+  public static GItem empty() {
+    return of(Material.AIR);
+  }
 
   public static GItem of(ItemStack item) {
     return of(item, null, null);
