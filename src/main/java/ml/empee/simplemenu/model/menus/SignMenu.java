@@ -27,7 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 @RequiredArgsConstructor
 public class SignMenu implements Menu {
 
-  private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(SignMenu.class);
   private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
   @Getter
@@ -51,8 +50,7 @@ public class SignMenu implements Menu {
   }
 
   private void openAfter1_9() {
-    Location fakeSignLoc = player.getLocation();
-    fakeSignLoc.setY(200);
+    Location fakeSignLoc = player.getLocation().subtract(0, 5, 0);
 
     PacketContainer spawnSignPacket = protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
     spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(Material.valueOf("OAK_SIGN")));
@@ -88,18 +86,10 @@ public class SignMenu implements Menu {
     protocolManager.sendServerPacket(player, spawnSignPacket, false);
     protocolManager.sendServerPacket(player, signDataPacket, false);
     protocolManager.sendServerPacket(player, openSignPacket, false);
-
-    Bukkit.getScheduler().runTaskLater(
-        plugin, () -> {
-          spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(fakeSignLoc.getBlock().getBlockData()));
-          protocolManager.sendServerPacket(player, spawnSignPacket, false);
-        }, 2
-    );
   }
 
   private void openBefore1_9() {
-    Location fakeSignLoc = player.getLocation();
-    fakeSignLoc.setY(200);
+    Location fakeSignLoc = player.getLocation().subtract(0, 5, 0);
 
     PacketContainer spawnSignPacket = protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
     spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(Material.valueOf("SIGN_POST")));
@@ -127,13 +117,6 @@ public class SignMenu implements Menu {
     protocolManager.sendServerPacket(player, spawnSignPacket, false);
     protocolManager.sendServerPacket(player, editSignPacket, false);
     protocolManager.sendServerPacket(player, openSignPacket, false);
-
-    Bukkit.getScheduler().runTaskLater(
-        plugin, () -> {
-          spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(fakeSignLoc.getBlock().getType()));
-          protocolManager.sendServerPacket(player, spawnSignPacket, false);
-        }, 2
-    );
   }
 
   public void onOpen() {
