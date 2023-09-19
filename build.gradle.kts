@@ -60,10 +60,8 @@ tasks {
     filteringCharset = Charsets.UTF_8.name()
   }
 
-  compileJava {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
-
-    options.encoding = Charsets.UTF_8.name()
+  java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
 }
