@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.Mr-EmPee"
-version = "0.0.5"
+version = "0.0.6"
 var basePackage = "ml.empee.simplemenu"
 
 repositories {
@@ -61,7 +61,9 @@ tasks {
   }
 
   compileJava {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
+
     options.encoding = Charsets.UTF_8.name()
-    options.release.set(17)
   }
 }
