@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for applying masks to matrix of items
@@ -20,17 +21,15 @@ public class Mask {
   /**
    * Apply the mask to the given item matrix
    */
-  public GItem[][] applyMask(@NonNull GItem[][] columns, boolean vertical) {
-    List<List<GItem>> items = new ArrayList<>(
-        Arrays.stream(columns)
+  public GItem[][] applyMask(@NonNull GItem[][] matrix, boolean vertical) {
+    List<List<GItem>> items = Arrays.stream(matrix)
             .map(l -> (List<GItem>) new ArrayList(Arrays.asList(l)))
-            .toList()
-    );
+            .collect(Collectors.toCollection(ArrayList::new));
 
     items.forEach(c -> c.removeIf(Objects::isNull));
 
-    if (items.size() == 0) {
-      return columns;
+    if (items.isEmpty()) {
+      return matrix;
     }
 
     if (vertical) {
@@ -41,7 +40,7 @@ public class Mask {
 
     return items.stream()
         .map(c -> c.toArray(new GItem[items.get(0).size()]))
-        .toList().toArray(new GItem[0][0]);
+        .collect(Collectors.toList()).toArray(new GItem[0][0]);
   }
 
   private static void applyMaskHorizontally(List<List<GItem>> items, String[] mask) {
