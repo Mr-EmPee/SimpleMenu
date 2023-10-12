@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.Mr-EmPee"
-version = "0.0.6"
+version = "0.0.7"
 var basePackage = "ml.empee.simplemenu"
 
 repositories {
@@ -22,6 +22,9 @@ repositories {
 dependencies {
   compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
   compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0")
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
 java {
@@ -31,6 +34,10 @@ java {
   toolchain {
     languageVersion.set(JavaLanguageVersion.of(17))
   }
+}
+
+tasks.named<Test>("test") {
+  useJUnitPlatform()
 }
 
 publishing {
