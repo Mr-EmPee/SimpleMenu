@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -23,6 +24,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor(staticName = "of")
 public class GItem {
 
+  private final UUID id = UUID.randomUUID();
   private ItemStack itemstack;
   private Consumer<InventoryClickEvent> clickHandler;
   private Supplier<Boolean> visibilityHandler;
@@ -67,4 +69,28 @@ public class GItem {
     return visibilityHandler.get();
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    GItem other = (GItem) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
+  }
 }

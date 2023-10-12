@@ -1,8 +1,9 @@
 package ml.empee.simplemenu.model.menus;
 
-import ml.empee.simplemenu.model.pane.StaticPane;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import ml.empee.simplemenu.model.panes.StaticPane;
 
 /**
  * Menu that is of Chest GUI type

@@ -4,7 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ml.empee.simplemenu.handlers.InventoryHandler;
-import ml.empee.simplemenu.model.pane.StaticPane;
+import ml.empee.simplemenu.model.panes.StaticPane;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
