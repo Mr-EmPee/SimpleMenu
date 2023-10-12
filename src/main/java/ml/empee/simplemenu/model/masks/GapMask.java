@@ -6,15 +6,25 @@ import java.util.stream.Stream;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * A mask that can be applied to a list of items to create a gap between them
+ */
+
 @RequiredArgsConstructor(staticName = "of")
 public class GapMask implements Mask {
 
   private final String mask;
 
+  /**
+   * Creates a horizontal mask from a list of strings
+   */
   public static GapMask horizontal(String... mask) {
     return new GapMask(String.join("", mask));
   }
 
+  /**
+   * Creates a vertical mask from a list of strings
+   */
   public static GapMask vertical(String... mask) {
     StringBuilder builder = new StringBuilder();
 
@@ -32,6 +42,9 @@ public class GapMask implements Mask {
     return new GapMask(builder.toString());
   }
 
+  /**
+   * @{inheritDoc}
+   */
   public <K> List<K> apply(List<K> items) {
     var result = new ArrayList<K>();
 

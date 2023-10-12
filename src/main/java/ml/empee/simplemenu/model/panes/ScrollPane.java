@@ -9,6 +9,10 @@ import lombok.Setter;
 import ml.empee.simplemenu.model.GItem;
 import ml.empee.simplemenu.model.masks.Mask;
 
+/**
+ * A pane that can hold a list of items and display only a portion of them
+ */
+
 public class ScrollPane extends Pane {
 
   private final List<GItem> items = new ArrayList<>();

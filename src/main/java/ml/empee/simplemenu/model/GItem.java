@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -79,18 +80,10 @@ public class GItem {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
+    if (!(obj instanceof GItem)) {
       return false;
-    if (getClass() != obj.getClass())
-      return false;
-    GItem other = (GItem) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    return true;
+    }
+
+    return Objects.equals(id, ((GItem) obj).id);
   }
 }
