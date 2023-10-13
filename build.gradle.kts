@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
+  compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
   compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")

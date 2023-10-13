@@ -40,12 +40,12 @@ public abstract class InventoryMenu implements Menu {
   }
 
   public final void open() {
-    InventoryHandler.registerInventory(player.getUniqueId(), this);
-
     onOpen();
-    
+
     topInventory.setContents(topPane.getContents());
-    player.openInventory(topInventory);
+
+    var view = player.openInventory(topInventory);
+    InventoryHandler.register(view, this);
   }
 
   public void onOpen() {
