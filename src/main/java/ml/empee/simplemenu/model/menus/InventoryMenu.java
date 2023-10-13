@@ -1,16 +1,15 @@
 package ml.empee.simplemenu.model.menus;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.Inventory;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ml.empee.simplemenu.handlers.InventoryHandler;
 import ml.empee.simplemenu.model.panes.StaticPane;
-
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.Inventory;
 
 /**
  * A menu
@@ -28,7 +27,7 @@ public abstract class InventoryMenu implements Menu {
 
   private final StaticPane topPane;
 
-  //TODO: Bottom pane (Player inv)
+  // TODO: Bottom pane (Player inv)
 
   public final StaticPane top() {
     return topPane;
@@ -41,18 +40,18 @@ public abstract class InventoryMenu implements Menu {
   }
 
   public final void open() {
-    onOpen();
+    InventoryHandler.registerInventory(player.getUniqueId(), this);
 
+    onOpen();
+    
     topInventory.setContents(topPane.getContents());
-    InventoryHandler.registerInventory(player.openInventory(topInventory), this);
+    player.openInventory(topInventory);
   }
 
   public void onOpen() {
-
   }
 
-  public void onClose(InventoryCloseEvent event) {
-
+  public void onClose() {
   }
 
   public void onClick(InventoryClickEvent event) {

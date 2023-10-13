@@ -24,7 +24,7 @@ public abstract class Pane {
   private final Map<Pane, Slot> subPanes = new HashMap<>();
 
   protected GItem[] paneItems;
-  private GItem[] currentItems;
+  private GItem[] viewItems;
 
   protected Pane(int length, int height) {
     if (length <= 0 || height <= 0) {
@@ -64,24 +64,24 @@ public abstract class Pane {
    * Refresh the visible items inside the pane
    */
   public void refresh() {
-    currentItems = new GItem[paneItems.length];
+    viewItems = new GItem[paneItems.length];
     for (int i = 0; i < paneItems.length; i++) {
       var item = paneItems[i];
       if (item != null && item.isVisible()) {
-        currentItems[i] = item;
+        viewItems[i] = item;
       }
     }
 
     subPanes.keySet().forEach(Pane::refresh);
-    subPanes.forEach((pane, offset) -> importItemsFromPane(pane, offset, currentItems));
+    subPanes.forEach((pane, offset) -> importItemsFromPane(pane, offset, viewItems));
   }
 
   public GItem[] getItems() {
-    if (currentItems == null) {
+    if (viewItems == null) {
       refresh();
     }
 
-    return currentItems;
+    return viewItems;
   }
 
   /**
