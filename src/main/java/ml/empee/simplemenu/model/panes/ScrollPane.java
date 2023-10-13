@@ -17,8 +17,18 @@ public class ScrollPane extends Pane {
 
   private final List<GItem> items = new ArrayList<>();
 
+  private List<GItem> itemsCache = new ArrayList<>();
+  private boolean cacheDirty = true;
+
+  @Getter
   private final boolean vertical;
   private final int groupSize;
+
+  @Getter
+  private int totalCols;
+
+  @Getter
+  private int totalRows;
 
   @Setter
   @Getter
@@ -49,24 +59,44 @@ public class ScrollPane extends Pane {
 
   public void addAll(List<GItem> items) {
     this.items.addAll(items);
+    cacheDirty = true;
   }
 
   public void add(GItem item) {
     items.add(item);
+    cacheDirty = true;
   }
 
   public void remove(Predicate<GItem> predicate) {
     items.removeIf(predicate);
+    cacheDirty = true;
   }
 
   @Override
   public void refresh() {
-    var items = getDecoratedItems();
+    if (cacheDirty) {
+      itemsCache = getDecoratedItemsView();
+      cacheDirty = false;
 
+      if (vertical) {
+        totalRows = groupSize;
+        totalCols = (int) Math.ceil((double) itemsCache.size() / groupSize);
+      } else {
+        totalCols = groupSize;
+        totalRows = (int) Math.ceil((double) itemsCache.size() / groupSize);
+      }
+    }
+
+    populateItemPane(itemsCache);
+
+    super.refresh();
+  }
+
+  private void populateItemPane(List<GItem> items) {
     for (int row = 0; row < height; row++) {
       for (int col = 0; col < length; col++) {
         int itemIndex = toIndex(col + colOffset, row + rowOffset);
-        if (itemIndex == -1 || itemIndex >= items.size()) {
+        if (itemIndex == -1) {
           paneItems[toSlot(col, row)] = null;
           continue;
         }
@@ -74,11 +104,9 @@ public class ScrollPane extends Pane {
         paneItems[toSlot(col, row)] = items.get(itemIndex);
       }
     }
-
-    super.refresh();
   }
 
-  private List<GItem> getDecoratedItems() {
+  private List<GItem> getDecoratedItemsView() {
     if (mask == null) {
       return items;
     }
@@ -88,20 +116,15 @@ public class ScrollPane extends Pane {
 
   /**
    * @return the index of the item in the list
-   * -1 if the column or row is out of bounds
-   * may still return an index out of bounds
+   *         -1 if if the col or row is out of bounds
    */
   private int toIndex(int col, int row) {
-    if (vertical) {
-      if (row >= groupSize) {
-        return -1;
-      }
-      
-      return (groupSize * col) + row;
+    if (col >= totalCols || row >= totalRows) {
+      return -1;
     }
 
-    if (col >= groupSize) {
-      return -1;
+    if (vertical) {
+      return (groupSize * col) + row;
     }
 
     return (groupSize * row) + col;
