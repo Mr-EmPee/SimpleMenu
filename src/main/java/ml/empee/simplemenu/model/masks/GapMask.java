@@ -43,7 +43,7 @@ public class GapMask implements Mask {
   }
 
   /**
-   * @{inheritDoc}
+   * {@inheritDoc}
    */
   public <K> List<K> apply(List<K> items) {
     var result = new ArrayList<K>();
