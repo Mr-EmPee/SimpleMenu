@@ -70,6 +70,13 @@ public class GItem {
     return visibilityHandler.get();
   }
 
+  /**
+   * Creates a copy of this item
+   */
+  public GItem clone() {
+    return GItem.of(itemstack.clone(), clickHandler, visibilityHandler);
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
