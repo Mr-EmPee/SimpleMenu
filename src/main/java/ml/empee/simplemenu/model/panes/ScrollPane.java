@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.bukkit.inventory.ItemStack;
+
 import lombok.Getter;
 import lombok.Setter;
 import ml.empee.simplemenu.model.GItem;
 import ml.empee.simplemenu.model.masks.Mask;
+import ml.empee.simplemenu.model.menus.InventoryMenu;
 
 /**
  * A pane that can hold a list of items and display only a portion of them
@@ -128,6 +131,56 @@ public class ScrollPane extends Pane {
     }
 
     return (groupSize * row) + col;
+  }
+
+  /**
+   * Button to go to the next page
+   * 
+   * @return
+   */
+  public GItem nextPage(ItemStack item, InventoryMenu menu) {
+    return GItem.builder()
+        .itemstack(item)
+        .clickHandler(e -> {
+          if (isVertical()) {
+            setColOffset(getColOffset() + getLength());
+          } else {
+            setRowOffset(getRowOffset() + getHeight());
+          }
+
+          getItem(e.getSlot()).get().setItemstack(item);
+          menu.refresh();
+        }).visibilityHandler(() -> {
+          if (isVertical()) {
+            return getColOffset() + 1 < totalCols;
+          } else {
+            return getRowOffset() + 1 < totalRows;
+          }
+        }).build();
+  }
+
+  /**
+   * Button to go to the previous page
+   */
+  public GItem backPage(ItemStack item, InventoryMenu menu) {
+    return GItem.builder()
+        .itemstack(item)
+        .clickHandler(e -> {
+          if (isVertical()) {
+            setColOffset(getColOffset() - getLength());
+          } else {
+            setRowOffset(getRowOffset() - getHeight());
+          }
+
+          getItem(e.getSlot()).get().setItemstack(item);
+          menu.refresh();
+        }).visibilityHandler(() -> {
+          if (isVertical()) {
+            return getColOffset() - getLength() >= 0;
+          } else {
+            return getRowOffset() - getHeight() >= 0;
+          }
+        }).build();
   }
 
 }
