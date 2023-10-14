@@ -24,8 +24,8 @@ public class InventoryMenu implements Menu {
 
   public InventoryMenu(Player player, int rows, String title) {
     this.player = player;
-    this.topInventory = player.getServer().createInventory(null, rows * 9, title);
-    this.topPane = new StaticPane(rows, 9);
+    this.topInventory = player.getServer().createInventory(null, 9 * rows, title);
+    this.topPane = new StaticPane(9, rows);
   }
 
   public final StaticPane top() {
