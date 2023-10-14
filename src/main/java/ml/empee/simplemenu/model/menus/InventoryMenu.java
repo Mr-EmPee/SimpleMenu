@@ -5,9 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import ml.empee.simplemenu.handlers.InventoryHandler;
 import ml.empee.simplemenu.model.panes.StaticPane;
 
@@ -15,19 +13,20 @@ import ml.empee.simplemenu.model.panes.StaticPane;
  * A menu
  */
 
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public abstract class InventoryMenu implements Menu {
+public class InventoryMenu implements Menu {
 
   @Getter
   protected final Player player;
-  @Getter
-  private final String title;
 
   private final Inventory topInventory;
 
   private final StaticPane topPane;
 
-  // TODO: Bottom pane (Player inv)
+  public InventoryMenu(Player player, int rows, String title) {
+    this.player = player;
+    this.topInventory = player.getServer().createInventory(null, rows * 9, title);
+    this.topPane = new StaticPane(rows, 9);
+  }
 
   public final StaticPane top() {
     return topPane;
@@ -43,9 +42,9 @@ public abstract class InventoryMenu implements Menu {
     onOpen();
 
     topInventory.setContents(topPane.getContents());
-
-    var view = player.openInventory(topInventory);
-    InventoryHandler.register(view, this);
+    player.openInventory(topInventory);
+    
+    InventoryHandler.register(player.getUniqueId(), this);
   }
 
   public void onOpen() {
