@@ -75,6 +75,17 @@ public class ScrollPane extends Pane {
     cacheDirty = true;
   }
 
+  public void clear() {
+    items.clear();
+    cacheDirty = true;
+  }
+
+  public void set(List<GItem> items) {
+    this.items.clear();
+    this.items.addAll(items);
+    cacheDirty = true;
+  }
+
   @Override
   public void refresh() {
     if (cacheDirty) {
