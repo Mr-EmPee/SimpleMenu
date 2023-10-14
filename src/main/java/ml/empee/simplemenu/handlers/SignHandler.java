@@ -22,6 +22,8 @@ import java.util.UUID;
  * Handle sign operations
  */
 
+//TODO: Refactoring!
+
 public class SignHandler {
 
   private static final Map<UUID, SignMenu> signs = new HashMap<>();

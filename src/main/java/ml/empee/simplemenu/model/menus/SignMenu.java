@@ -38,8 +38,6 @@ public class SignMenu implements Menu {
 
   @Override
   public final void open() {
-    SignHandler.registerSign(player.getUniqueId(), this);
-
     onOpen();
 
     if (ServerVersion.isGreaterThan(1, 9)) {
@@ -47,6 +45,8 @@ public class SignMenu implements Menu {
     } else {
       openBefore1_9();
     }
+
+    SignHandler.registerSign(player.getUniqueId(), this);
   }
 
   private void openAfter1_9() {
@@ -55,15 +55,13 @@ public class SignMenu implements Menu {
     PacketContainer spawnSignPacket = protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
     spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(Material.valueOf("OAK_SIGN")));
     spawnSignPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
-    //Set default sign text
+    // Set default sign text
     PacketContainer signDataPacket = protocolManager.createPacket(PacketType.Play.Server.TILE_ENTITY_DATA);
     NbtCompound signNBT = (NbtCompound) signDataPacket.getNbtModifier().read(0);
     signDataPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
     for (int line = 0; line < 4; line++) {
       signNBT.put("Text" + (line + 1), "{\"text\":\"" + (text[line] == null ? "" : text[line]) + "\"}");
@@ -77,11 +75,9 @@ public class SignMenu implements Menu {
     signDataPacket.getBlockEntityTypeModifier().write(0, WrappedRegistrable.blockEntityType("sign"));
     signDataPacket.getNbtModifier().write(0, signNBT);
 
-
     PacketContainer openSignPacket = protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
     openSignPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
     protocolManager.sendServerPacket(player, spawnSignPacket, false);
     protocolManager.sendServerPacket(player, signDataPacket, false);
@@ -94,10 +90,9 @@ public class SignMenu implements Menu {
     PacketContainer spawnSignPacket = protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
     spawnSignPacket.getBlockData().write(0, WrappedBlockData.createData(Material.valueOf("SIGN_POST")));
     spawnSignPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
-    //Set default sign text
+    // Set default sign text
     PacketContainer editSignPacket = protocolManager.createPacket(PacketType.Play.Server.UPDATE_SIGN);
     WrappedChatComponent[] text = new WrappedChatComponent[4];
     for (int i = 0; i < 4; i++) {
@@ -106,13 +101,11 @@ public class SignMenu implements Menu {
 
     editSignPacket.getChatComponentArrays().write(0, text);
     editSignPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
     PacketContainer openSignPacket = protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
     openSignPacket.getBlockPositionModifier().write(
-        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ())
-    );
+        0, new BlockPosition(fakeSignLoc.getBlockX(), fakeSignLoc.getBlockY(), fakeSignLoc.getBlockZ()));
 
     protocolManager.sendServerPacket(player, spawnSignPacket, false);
     protocolManager.sendServerPacket(player, editSignPacket, false);
