@@ -93,10 +93,10 @@ public class ScrollPane extends Pane {
       cacheDirty = false;
 
       if (vertical) {
-        totalRows = groupSize;
+        totalRows = itemsCache.size() < groupSize ? itemsCache.size() : groupSize;
         totalCols = (int) Math.ceil((double) itemsCache.size() / groupSize);
       } else {
-        totalCols = groupSize;
+        totalCols = itemsCache.size() < groupSize ? itemsCache.size() : groupSize;
         totalRows = (int) Math.ceil((double) itemsCache.size() / groupSize);
       }
     }
@@ -133,15 +133,18 @@ public class ScrollPane extends Pane {
    *         -1 if if the col or row is out of bounds
    */
   private int toIndex(int col, int row) {
-    if (col >= totalCols || row >= totalRows) {
+    int index;
+    if (vertical) {
+      index = (groupSize * col) + row;
+    } else {
+      index = (groupSize * row) + col;
+    }
+
+    if (col >= totalCols || row >= totalRows || index >= itemsCache.size()) {
       return -1;
     }
 
-    if (vertical) {
-      return (groupSize * col) + row;
-    }
-
-    return (groupSize * row) + col;
+    return index;
   }
 
   /**
