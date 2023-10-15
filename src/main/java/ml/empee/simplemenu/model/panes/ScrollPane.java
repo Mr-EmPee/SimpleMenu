@@ -52,12 +52,12 @@ public class ScrollPane extends Pane {
     this.groupSize = groupSize;
   }
 
-  public static ScrollPane horizontal(int viewLength, int viewHeight, int totalHeight) {
-    return new ScrollPane(viewLength, viewHeight, totalHeight, false);
+  public static ScrollPane horizontal(int viewLength, int viewHeight, int totalLength) {
+    return new ScrollPane(viewLength, viewHeight, totalLength, false);
   }
 
-  public static ScrollPane vertical(int viewLength, int viewHeight, int totalLength) {
-    return new ScrollPane(viewLength, viewHeight, totalLength, true);
+  public static ScrollPane vertical(int viewLength, int viewHeight, int totalHeight) {
+    return new ScrollPane(viewLength, viewHeight, totalHeight, true);
   }
 
   public void addAll(List<GItem> items) {
@@ -166,9 +166,9 @@ public class ScrollPane extends Pane {
           menu.refresh();
         }).visibilityHandler(() -> {
           if (isVertical()) {
-            return getColOffset() + 1 < totalCols;
+            return getColOffset() + 1 < getTotalCols();
           } else {
-            return getRowOffset() + 1 < totalRows;
+            return getRowOffset() + 1 < getTotalRows();
           }
         }).build();
   }
