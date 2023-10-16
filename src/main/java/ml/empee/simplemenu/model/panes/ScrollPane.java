@@ -11,6 +11,7 @@ import lombok.Getter;
 import ml.empee.simplemenu.model.GItem;
 import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.Mask;
+import ml.empee.simplemenu.model.menus.InventoryMenu;
 
 /**
  * A pane that can hold a list of items and display only a portion of them
@@ -169,7 +170,7 @@ public class ScrollPane extends Pane {
    * 
    * @return
    */
-  public GItem nextPage(Supplier<ItemStack> item) {
+  public GItem nextPage(InventoryMenu menu, Supplier<ItemStack> item) {
     return GItem.builder()
         .itemStackHandler(item)
         .clickHandler(e -> {
@@ -179,7 +180,7 @@ public class ScrollPane extends Pane {
             setRowOffset(getRowOffset() + getHeight());
           }
 
-          update();
+          menu.update();
         }).visibilityHandler(() -> {
           if (isVertical()) {
             return getColOffset() + 1 < getTotalCols();
@@ -192,7 +193,7 @@ public class ScrollPane extends Pane {
   /**
    * Button to go to the previous page
    */
-  public GItem backPage(Supplier<ItemStack> item) {
+  public GItem backPage(InventoryMenu menu, Supplier<ItemStack> item) {
     return GItem.builder()
         .itemStackHandler(item)
         .clickHandler(e -> {
@@ -202,7 +203,7 @@ public class ScrollPane extends Pane {
             setRowOffset(getRowOffset() - getHeight());
           }
 
-          update();
+          menu.update();
         }).visibilityHandler(() -> {
           if (isVertical()) {
             return getColOffset() - getLength() >= 0;
