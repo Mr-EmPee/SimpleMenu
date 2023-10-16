@@ -20,8 +20,8 @@ public class ScrollPane extends Pane {
 
   private final List<GItem> items = new ArrayList<>();
 
-  private List<GItem> itemsCache = new ArrayList<>();
-  private boolean cacheDirty = true;
+  private List<GItem> viewItems = new ArrayList<>();
+  private boolean viewDirty = true;
 
   @Getter
   private final boolean vertical;
@@ -62,46 +62,50 @@ public class ScrollPane extends Pane {
 
   public void addAll(List<GItem> items) {
     this.items.addAll(items);
-    cacheDirty = true;
+    viewDirty = true;
   }
 
   public void add(GItem item) {
     items.add(item);
-    cacheDirty = true;
+    viewDirty = true;
   }
 
   public void remove(Predicate<GItem> predicate) {
     items.removeIf(predicate);
-    cacheDirty = true;
+    viewDirty = true;
   }
 
   public void clear() {
     items.clear();
-    cacheDirty = true;
+    viewDirty = true;
   }
 
   public void set(List<GItem> items) {
     this.items.clear();
     this.items.addAll(items);
-    cacheDirty = true;
+    viewDirty = true;
   }
 
   @Override
   public void refresh() {
-    if (cacheDirty) {
-      itemsCache = getDecoratedItemsView();
-      cacheDirty = false;
+    if (viewDirty) {
+      viewDirty = false;
+      if (mask != null) {
+        viewItems = mask.apply(items);
+      } else {
+        viewItems = items;
+      }
 
       if (vertical) {
-        totalRows = itemsCache.size() < groupSize ? itemsCache.size() : groupSize;
-        totalCols = (int) Math.ceil((double) itemsCache.size() / groupSize);
+        totalRows = viewItems.size() < groupSize ? viewItems.size() : groupSize;
+        totalCols = (int) Math.ceil((double) viewItems.size() / groupSize);
       } else {
-        totalCols = itemsCache.size() < groupSize ? itemsCache.size() : groupSize;
-        totalRows = (int) Math.ceil((double) itemsCache.size() / groupSize);
+        totalCols = viewItems.size() < groupSize ? viewItems.size() : groupSize;
+        totalRows = (int) Math.ceil((double) viewItems.size() / groupSize);
       }
     }
 
-    populateItemPane(itemsCache);
+    populateItemPane(viewItems);
 
     super.refresh();
   }
@@ -120,14 +124,6 @@ public class ScrollPane extends Pane {
     }
   }
 
-  private List<GItem> getDecoratedItemsView() {
-    if (mask == null) {
-      return items;
-    }
-
-    return mask.apply(items);
-  }
-
   /**
    * @return the index of the item in the list
    *         -1 if if the col or row is out of bounds
@@ -140,7 +136,7 @@ public class ScrollPane extends Pane {
       index = (groupSize * row) + col;
     }
 
-    if (col >= totalCols || row >= totalRows || index >= itemsCache.size()) {
+    if (col >= totalCols || row >= totalRows || index >= viewItems.size()) {
       return -1;
     }
 
