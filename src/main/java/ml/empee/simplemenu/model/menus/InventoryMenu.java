@@ -37,6 +37,10 @@ public class InventoryMenu implements Menu {
 
   protected String title = "";
 
+  public void addPane(Pane pane) {
+    panes.add(pane);
+  }
+
   public void update() {
     if (inventory == null) {
       throw new IllegalStateException("Cannot update a menu that is not open");
