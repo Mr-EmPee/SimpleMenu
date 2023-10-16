@@ -65,15 +65,28 @@ public abstract class Pane {
    */
   public void refresh() {
     viewItems = new GItem[paneItems.length];
+    subPanes.forEach((pane, offset) -> {
+      pane.refresh();
+
+      var items = pane.getItems();
+      for (int col = 0; col < pane.getLength(); col++) {
+        for (int row = 0; row < pane.getHeight(); row++) {
+          GItem item = items[pane.toSlot(col, row)];
+          if (item == null) {
+            continue;
+          }
+
+          viewItems[toSlot(col + offset.getCol(), row + offset.getRow())] = item;
+        }
+      }
+    });
+
     for (int i = 0; i < paneItems.length; i++) {
       var item = paneItems[i];
       if (item != null && item.isVisible()) {
         viewItems[i] = item;
       }
     }
-
-    subPanes.keySet().forEach(Pane::refresh);
-    subPanes.forEach((pane, offset) -> importItemsFromPane(pane, offset, viewItems));
   }
 
   public GItem[] getItems() {
@@ -100,20 +113,5 @@ public abstract class Pane {
 
     return itemStacks;
   }
-
-  private void importItemsFromPane(Pane pane, Slot offset, GItem[] target) {
-    var items = pane.getItems();
-    for (int col = 0; col < pane.getLength(); col++) {
-      for (int row = 0; row < pane.getHeight(); row++) {
-        GItem item = items[pane.toSlot(col, row)];
-        if (item == null) {
-          continue;
-        }
-
-        target[toSlot(col + offset.getCol(), row + offset.getRow())] = item;
-      }
-    }
-  }
-
 
 }
