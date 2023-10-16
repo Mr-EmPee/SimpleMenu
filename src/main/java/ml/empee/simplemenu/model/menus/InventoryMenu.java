@@ -57,15 +57,16 @@ public class InventoryMenu implements Menu {
    * Overwrites the menu items with the items from the pane
    */
   public void update(Pane pane) {
-    if (inventory == null || content == null) {
-      throw new IllegalStateException("Cannot update a menu that is not open");
+    var offset = panes.get(pane);
+    if (inventory == null || content == null || offset == null) {
+      throw new IllegalStateException("Menu must be open and must contain the pane");
     }
 
     for (int col = 0; col < pane.getLength(); col++) {
       for (int row = 0; row < pane.getHeight(); row++) {
         var item = pane.getItem(col, row).orElse(null);
         if (item != null && item.isVisible()) {
-          int index = ((row + pane.getOffset().getRow()) * 9) + col + pane.getOffset().getCol();
+          int index = ((row + offset.getRow()) * 9) + col + offset.getCol();
           content[index] = item.getItemStack();
         }
       }
