@@ -156,7 +156,7 @@ public class ScrollPane extends Pane {
     return index;
   }
 
-  private int getPage() {
+  public int getPage() {
     if (getTotalCols() == 0 || getTotalRows() == 0) {
       return 0;
     }
