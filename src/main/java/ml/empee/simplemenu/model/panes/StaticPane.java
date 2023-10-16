@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ml.empee.simplemenu.model.GItem;
-import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.Mask;
 
 /**
@@ -13,8 +12,8 @@ import ml.empee.simplemenu.model.masks.Mask;
 
 public class StaticPane extends Pane {
 
-  public StaticPane(int length, int height, Slot offset) {
-    super(length, height, offset);
+  public StaticPane(int length, int height) {
+    super(length, height);
   }
 
   public void setItem(int col, int row, GItem item) {

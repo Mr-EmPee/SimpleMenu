@@ -136,7 +136,7 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldApplyMaskHorizontally() {
     var items = getItems();
-    var pane = ScrollPane.horizontal(3, 3, Slot.of(0, 0), 6);
+    var pane = ScrollPane.horizontal(3, 3, 6);
     pane.addAll(items);
 
     pane.setMask(GapMask.horizontal("011110", "100001"));
@@ -156,7 +156,7 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldApplyMaskVertically() {
     var items = getItems();
-    var pane = ScrollPane.vertical(3, 3, Slot.of(0, 0), 6);
+    var pane = ScrollPane.vertical(3, 3, 6);
     pane.addAll(items);
 
     pane.setMask(GapMask.vertical(

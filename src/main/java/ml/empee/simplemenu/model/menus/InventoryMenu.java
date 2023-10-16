@@ -1,7 +1,9 @@
 package ml.empee.simplemenu.model.menus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,6 +15,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ml.empee.simplemenu.handlers.InventoryHandler;
 import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.panes.Pane;
 
 /**
@@ -27,7 +30,7 @@ public class InventoryMenu implements Menu {
   @Getter
   protected final Player player;
 
-  private final List<Pane> panes = new ArrayList<>();
+  private final Map<Pane, Slot> panes = new HashMap<>();
 
   private final int rows;
 
@@ -37,8 +40,8 @@ public class InventoryMenu implements Menu {
 
   protected String title = "";
 
-  public void addPane(Pane pane) {
-    panes.add(pane);
+  public void addPane(int col, int row, Pane pane) {
+    panes.put(pane, Slot.of(col, row));
   }
 
   public void update() {
@@ -91,8 +94,11 @@ public class InventoryMenu implements Menu {
    * Get the item at the specified slot
    */
   public GItem getItem(int col, int row) {
-    for (Pane pane : panes) {
-      int slot = pane.getSlot(col - pane.getOffset().getCol(), row - pane.getOffset().getRow());
+    for (var entry : panes.entrySet()) {
+      var pane = entry.getKey();
+      var offset = entry.getValue();
+
+      int slot = pane.getSlot(col - offset.getCol(), row - offset.getRow());
       if (slot != -1) {
         var item = pane.getItem(slot);
         if (item != null && item.isVisible()) {

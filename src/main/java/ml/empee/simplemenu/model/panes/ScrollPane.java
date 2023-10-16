@@ -42,19 +42,19 @@ public class ScrollPane extends Pane {
   @Getter
   private int rowOffset;
 
-  private ScrollPane(int viewLength, int viewHeight, Slot offset, int groupSize, boolean vertical) {
-    super(viewLength, viewHeight, offset);
+  private ScrollPane(int viewLength, int viewHeight, int groupSize, boolean vertical) {
+    super(viewLength, viewHeight);
 
     this.vertical = vertical;
     this.groupSize = groupSize;
   }
 
-  public static ScrollPane horizontal(int viewLength, int viewHeight, Slot offset, int totalLength) {
-    return new ScrollPane(viewLength, viewHeight, offset, totalLength, false);
+  public static ScrollPane horizontal(int viewLength, int viewHeight, int totalLength) {
+    return new ScrollPane(viewLength, viewHeight, totalLength, false);
   }
 
-  public static ScrollPane vertical(int viewLength, int viewHeight, Slot offset, int totalHeight) {
-    return new ScrollPane(viewLength, viewHeight, offset, totalHeight, true);
+  public static ScrollPane vertical(int viewLength, int viewHeight, int totalHeight) {
+    return new ScrollPane(viewLength, viewHeight, totalHeight, true);
   }
 
   public void addAll(List<GItem> items) {

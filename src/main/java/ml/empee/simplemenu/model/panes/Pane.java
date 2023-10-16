@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import lombok.Getter;
 import ml.empee.simplemenu.model.GItem;
-import ml.empee.simplemenu.model.Slot;
 
 /**
  * A section of a menu
@@ -16,17 +15,14 @@ public abstract class Pane {
   protected final int length;
   @Getter
   protected final int height;
-  @Getter
-  protected final Slot offset;
 
   protected GItem[] content;
 
-  protected Pane(int length, int height, Slot offset) {
+  protected Pane(int length, int height) {
     if (length <= 0 || height <= 0) {
       throw new IllegalArgumentException("Length and Height must be greater then 0");
     }
 
-    this.offset = offset;
     this.length = length;
     this.height = height;
 
