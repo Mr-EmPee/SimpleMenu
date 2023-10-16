@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.Mask;
 
 /**
@@ -12,30 +13,30 @@ import ml.empee.simplemenu.model.masks.Mask;
 
 public class StaticPane extends Pane {
 
-  public StaticPane(int length, int height) {
-    super(length, height);
+  public StaticPane(int length, int height, Slot offset) {
+    super(length, height, offset);
   }
 
   public void setItem(int col, int row, GItem item) {
-    paneItems[toSlot(col, row)] = item;
+    content[getSlot(col, row)] = item;
   }
 
   public void fillRow(int row, GItem item) {
     for (int i = 0; i < getLength(); i++) {
-      setItem(i, row, item.clone());
+      setItem(i, row, item);
     }
   }
 
   public void fillCol(int col, GItem item) {
     for (int i = 0; i < getHeight(); i++) {
-      setItem(col, i, item.clone());
+      setItem(col, i, item);
     }
   }
 
   public void fill(GItem item) {
     for (int i = 0; i < getLength(); i++) {
       for (int j = 0; j < getHeight(); j++) {
-        setItem(i, j, item.clone());
+        setItem(i, j, item);
       }
     }
   }
@@ -49,13 +50,13 @@ public class StaticPane extends Pane {
     }
 
     List<GItem> items = new ArrayList<>();
-    for (int i = 0; i < paneItems.length; i++) {
-      items.add(item.clone());
+    for (int i = 0; i < content.length; i++) {
+      items.add(item);
     }
 
     items = mask.apply(items);
-    for (int i = 0; i < paneItems.length; i++) {
-      paneItems[i] = items.get(i);
+    for (int i = 0; i < content.length; i++) {
+      content[i] = items.get(i);
     }
   }
 

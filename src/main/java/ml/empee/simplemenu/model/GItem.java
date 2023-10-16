@@ -1,18 +1,19 @@
 package ml.empee.simplemenu.model;
 
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * An item that is contained inside a Menu
@@ -22,36 +23,42 @@ import java.util.function.Supplier;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor
 public class GItem {
 
   private final UUID id = UUID.randomUUID();
-  private ItemStack itemstack;
+
+  private ItemStack itemStack;
+  private Supplier<ItemStack> itemStackHandler;
+
   private Consumer<InventoryClickEvent> clickHandler;
   private Supplier<Boolean> visibilityHandler;
 
   public static GItem empty() {
-    return of(Material.AIR);
-  }
-
-  public static GItem of(ItemStack item) {
-    return of(item, null, null);
-  }
-
-  public static GItem of(Material item) {
-    return of(new ItemStack(item), null, null);
+    return of(Material.AIR, 1);
   }
 
   public static GItem of(Material item, int amount) {
-    return of(new ItemStack(item, amount), null, null);
+    return GItem.builder()
+        .itemStackHandler(() -> new ItemStack(item, amount))
+        .build();
   }
 
-  public ItemStack getItemStack() {
-    if (itemstack == null) {
-      return new ItemStack(Material.AIR);
-    }
+  public static GItem of(ItemStack item) {
+    return GItem.builder()
+        .itemStackHandler(() -> item)
+        .build();
+  }
 
-    return itemstack.clone();
+  /**
+   * @return the ItemStack that represents this item or null
+   */
+  public ItemStack getItemStack() {
+    if (itemStack != null) {
+      return itemStack;
+    }
+    
+    return itemStackHandler.get();
   }
 
   public void onClick(InventoryClickEvent event) {
@@ -68,13 +75,6 @@ public class GItem {
     }
 
     return visibilityHandler.get();
-  }
-
-  /**
-   * Creates a copy of this item
-   */
-  public GItem clone() {
-    return GItem.of(itemstack.clone(), clickHandler, visibilityHandler);
   }
 
   @Override

@@ -71,7 +71,10 @@ public class InventoryHandler implements Listener {
 
     menu.onClick(event);
     if (event.getView().getTopInventory() == event.getClickedInventory()) {
-      menu.top().getItem(event.getSlot()).ifPresent(i -> i.onClick(event));
+      int col = event.getSlot() % 9;
+      int row = event.getSlot() / 9;
+
+      menu.getItem(col, row).onClick(event);
     }
   }
 

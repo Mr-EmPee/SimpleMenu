@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.GapMask;
 
 class ScrollPaneTest extends Assertions {
@@ -47,10 +48,10 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldPopulatePaneHorizontally() {
     var items = getItems();
-    var pane = ScrollPane.horizontal(3, 3, 6);
+    var pane = ScrollPane.horizontal(3, 3, Slot.of(0, 0), 6);
     pane.addAll(items);
 
-    var content = pane.getItems();
+    var content = pane.content;
     assertEquals(items.get(0), content[0]);
     assertEquals(items.get(1), content[1]);
     assertEquals(items.get(2), content[2]);
@@ -63,9 +64,6 @@ class ScrollPaneTest extends Assertions {
 
     pane.setColOffset(2);
     pane.setRowOffset(1);
-    pane.refresh();
-
-    content = pane.getItems();
 
     assertEquals(items.get(8), content[0]);
     assertEquals(items.get(9), content[1]);
@@ -79,9 +77,6 @@ class ScrollPaneTest extends Assertions {
 
     pane.setColOffset(4);
     pane.setRowOffset(3);
-    pane.refresh();
-
-    content = pane.getItems();
 
     assertEquals(items.get(22), content[0]);
     assertEquals(items.get(23), content[1]);
@@ -97,10 +92,10 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldPopulatePaneVertically() {
     var items = getItems();
-    var pane = ScrollPane.vertical(3, 3, 6);
+    var pane = ScrollPane.vertical(3, 3, Slot.of(0, 0), 6);
     pane.addAll(items);
 
-    var content = pane.getItems();
+    var content = pane.content;
     assertEquals(items.get(0), content[0]);
     assertEquals(items.get(6), content[1]);
     assertEquals(items.get(12), content[2]);
@@ -113,9 +108,6 @@ class ScrollPaneTest extends Assertions {
 
     pane.setColOffset(2);
     pane.setRowOffset(1);
-    pane.refresh();
-
-    content = pane.getItems();
 
     assertEquals(items.get(13), content[0]);
     assertEquals(items.get(19), content[1]);
@@ -129,9 +121,6 @@ class ScrollPaneTest extends Assertions {
 
     pane.setColOffset(3);
     pane.setRowOffset(4);
-    pane.refresh();
-
-    content = pane.getItems();
 
     assertEquals(items.get(22), content[0]);
     assertEquals(items.get(28), content[1]);
@@ -147,12 +136,12 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldApplyMaskHorizontally() {
     var items = getItems();
-    var pane = ScrollPane.horizontal(3, 3, 6);
+    var pane = ScrollPane.horizontal(3, 3, Slot.of(0, 0), 6);
     pane.addAll(items);
 
     pane.setMask(GapMask.horizontal("011110", "100001"));
 
-    var content = pane.getItems();
+    var content = pane.content;
     assertNull(content[0]);
     assertEquals(items.get(0), content[1]);
     assertEquals(items.get(1), content[2]);
@@ -167,7 +156,7 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldApplyMaskVertically() {
     var items = getItems();
-    var pane = ScrollPane.vertical(3, 3, 6);
+    var pane = ScrollPane.vertical(3, 3, Slot.of(0, 0), 6);
     pane.addAll(items);
 
     pane.setMask(GapMask.vertical(
@@ -179,7 +168,7 @@ class ScrollPaneTest extends Assertions {
                 "01"
     ));
 
-    var content = pane.getItems();
+    var content = pane.content;
     assertNull(content[0]);
     assertEquals(items.get(4), content[1]);
     assertNull(content[2]);

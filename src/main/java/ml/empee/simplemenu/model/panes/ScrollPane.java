@@ -3,14 +3,14 @@ package ml.empee.simplemenu.model.panes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
-import lombok.Setter;
 import ml.empee.simplemenu.model.GItem;
+import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.Mask;
-import ml.empee.simplemenu.model.menus.InventoryMenu;
 
 /**
  * A pane that can hold a list of items and display only a portion of them
@@ -20,8 +20,7 @@ public class ScrollPane extends Pane {
 
   private final List<GItem> items = new ArrayList<>();
 
-  private List<GItem> viewItems = new ArrayList<>();
-  private boolean viewDirty = true;
+  private List<GItem> maskedItems = new ArrayList<>();
 
   @Getter
   private final boolean vertical;
@@ -33,93 +32,113 @@ public class ScrollPane extends Pane {
   @Getter
   private int totalRows;
 
-  @Setter
   @Getter
   private Mask mask;
 
-  @Setter
   @Getter
   private int colOffset;
 
-  @Setter
   @Getter
   private int rowOffset;
 
-  private ScrollPane(int viewLength, int viewHeight, int groupSize, boolean vertical) {
-    super(viewLength, viewHeight);
+  private ScrollPane(int viewLength, int viewHeight, Slot offset, int groupSize, boolean vertical) {
+    super(viewLength, viewHeight, offset);
 
     this.vertical = vertical;
     this.groupSize = groupSize;
   }
 
-  public static ScrollPane horizontal(int viewLength, int viewHeight, int totalLength) {
-    return new ScrollPane(viewLength, viewHeight, totalLength, false);
+  public static ScrollPane horizontal(int viewLength, int viewHeight, Slot offset, int totalLength) {
+    return new ScrollPane(viewLength, viewHeight, offset, totalLength, false);
   }
 
-  public static ScrollPane vertical(int viewLength, int viewHeight, int totalHeight) {
-    return new ScrollPane(viewLength, viewHeight, totalHeight, true);
+  public static ScrollPane vertical(int viewLength, int viewHeight, Slot offset, int totalHeight) {
+    return new ScrollPane(viewLength, viewHeight, offset, totalHeight, true);
   }
 
   public void addAll(List<GItem> items) {
     this.items.addAll(items);
-    viewDirty = true;
+    update();
   }
 
   public void add(GItem item) {
     items.add(item);
-    viewDirty = true;
+    update();
   }
 
   public void remove(Predicate<GItem> predicate) {
     items.removeIf(predicate);
-    viewDirty = true;
+    update();
   }
 
   public void clear() {
     items.clear();
-    viewDirty = true;
+    update();
   }
 
   public void set(List<GItem> items) {
     this.items.clear();
     this.items.addAll(items);
-    viewDirty = true;
+    update();
   }
 
-  @Override
-  public void refresh() {
-    if (viewDirty) {
-      viewDirty = false;
-      if (mask != null) {
-        viewItems = mask.apply(items);
-      } else {
-        viewItems = items;
-      }
-
-      if (vertical) {
-        totalRows = viewItems.size() < groupSize ? viewItems.size() : groupSize;
-        totalCols = (int) Math.ceil((double) viewItems.size() / groupSize);
-      } else {
-        totalCols = viewItems.size() < groupSize ? viewItems.size() : groupSize;
-        totalRows = (int) Math.ceil((double) viewItems.size() / groupSize);
-      }
+  public void setColOffset(int colOffset) {
+    if (colOffset < 0 || colOffset >= totalCols) {
+      throw new IllegalArgumentException("Col offset out of bounds");
     }
 
-    populateItemPane(viewItems);
-
-    super.refresh();
+    this.colOffset = colOffset;
+    update();
   }
 
-  private void populateItemPane(List<GItem> items) {
+  public void setRowOffset(int rowOffset) {
+    if (rowOffset < 0 || rowOffset >= totalRows) {
+      throw new IllegalArgumentException("Col offset out of bounds");
+    }
+
+    this.rowOffset = rowOffset;
+    update();
+  }
+
+  public void setMask(Mask mask) {
+    this.mask = mask;
+    update();
+  }
+
+  private void update() {
+    updateMaskedItems();
+    updateTotalColsAndRows();
+    updatePaneView(maskedItems);
+  }
+
+  private void updateMaskedItems() {
+    if (mask != null) {
+      maskedItems = mask.apply(items);
+    } else {
+      maskedItems = items;
+    }
+  }
+
+  private void updateTotalColsAndRows() {
+    if (vertical) {
+      totalRows = maskedItems.size() < groupSize ? maskedItems.size() : groupSize;
+      totalCols = (int) Math.ceil((double) maskedItems.size() / groupSize);
+    } else {
+      totalCols = maskedItems.size() < groupSize ? maskedItems.size() : groupSize;
+      totalRows = (int) Math.ceil((double) maskedItems.size() / groupSize);
+    }
+  }
+
+  private void updatePaneView(List<GItem> items) {
     for (int row = 0; row < height; row++) {
       for (int col = 0; col < length; col++) {
-        int itemIndex = toIndex(col + colOffset, row + rowOffset);
+        int itemIndex = getIndex(col + colOffset, row + rowOffset);
         if (itemIndex == -1) {
-          paneItems[toSlot(col, row)] = null;
+          content[getSlot(col, row)] = null;
           continue;
         }
 
-        paneItems[toSlot(col, row)] = items.get(itemIndex);
+        content[getSlot(col, row)] = items.get(itemIndex);
       }
     }
   }
@@ -128,15 +147,9 @@ public class ScrollPane extends Pane {
    * @return the index of the item in the list
    *         -1 if if the col or row is out of bounds
    */
-  private int toIndex(int col, int row) {
-    int index;
-    if (vertical) {
-      index = (groupSize * col) + row;
-    } else {
-      index = (groupSize * row) + col;
-    }
-
-    if (col >= totalCols || row >= totalRows || index >= viewItems.size()) {
+  private int getIndex(int col, int row) {
+    int index = vertical ? (groupSize * col) + row : (groupSize * row) + col;
+    if (col >= totalCols || row >= totalRows || index >= maskedItems.size()) {
       return -1;
     }
 
@@ -148,9 +161,9 @@ public class ScrollPane extends Pane {
    * 
    * @return
    */
-  public GItem nextPage(ItemStack item, InventoryMenu menu) {
+  public GItem nextPage(Supplier<ItemStack> item) {
     return GItem.builder()
-        .itemstack(item)
+        .itemStackHandler(item)
         .clickHandler(e -> {
           if (isVertical()) {
             setColOffset(getColOffset() + getLength());
@@ -158,8 +171,7 @@ public class ScrollPane extends Pane {
             setRowOffset(getRowOffset() + getHeight());
           }
 
-          getItem(e.getSlot()).get().setItemstack(item);
-          menu.refresh();
+          update();
         }).visibilityHandler(() -> {
           if (isVertical()) {
             return getColOffset() + 1 < getTotalCols();
@@ -172,9 +184,9 @@ public class ScrollPane extends Pane {
   /**
    * Button to go to the previous page
    */
-  public GItem backPage(ItemStack item, InventoryMenu menu) {
+  public GItem backPage(Supplier<ItemStack> item) {
     return GItem.builder()
-        .itemstack(item)
+        .itemStackHandler(item)
         .clickHandler(e -> {
           if (isVertical()) {
             setColOffset(getColOffset() - getLength());
@@ -182,8 +194,7 @@ public class ScrollPane extends Pane {
             setRowOffset(getRowOffset() - getHeight());
           }
 
-          getItem(e.getSlot()).get().setItemstack(item);
-          menu.refresh();
+          update();
         }).visibilityHandler(() -> {
           if (isVertical()) {
             return getColOffset() - getLength() >= 0;
