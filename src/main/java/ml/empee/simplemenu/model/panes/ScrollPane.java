@@ -157,7 +157,7 @@ public class ScrollPane extends Pane {
       return 0;
     }
 
-    return isVertical() ? getColOffset() / getTotalCols() : getRowOffset() / getTotalRows();
+    return isVertical() ? getColOffset() / getLength() : getRowOffset() / getHeight();
   }
 
   public void nextPage() {
