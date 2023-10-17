@@ -200,6 +200,14 @@ public class ScrollPane extends Pane {
     }
   }
 
+  public boolean hasNextPage() {
+    if (isVertical()) {
+      return getColOffset() + getLength() < getTotalCols();
+    } else {
+      return getRowOffset() + getHeight() < getTotalRows();
+    }
+  }
+
   public boolean hasPrevious() {
     if (isVertical()) {
       return getColOffset() - 1 >= 0;
@@ -208,4 +216,11 @@ public class ScrollPane extends Pane {
     }
   }
 
+  public boolean hasPreviousPage() {
+    if (isVertical()) {
+      return getColOffset() - getLength() >= 0;
+    } else {
+      return getRowOffset() - getHeight() >= 0;
+    }
+  }
 }
