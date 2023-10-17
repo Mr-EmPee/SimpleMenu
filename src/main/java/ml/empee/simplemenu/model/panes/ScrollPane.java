@@ -3,15 +3,10 @@ package ml.empee.simplemenu.model.panes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
 import ml.empee.simplemenu.model.GItem;
-import ml.empee.simplemenu.model.Slot;
 import ml.empee.simplemenu.model.masks.Mask;
-import ml.empee.simplemenu.model.menus.InventoryMenu;
 
 /**
  * A pane that can hold a list of items and display only a portion of them
@@ -165,52 +160,52 @@ public class ScrollPane extends Pane {
     return isVertical() ? getColOffset() / getTotalCols() : getRowOffset() / getTotalRows();
   }
 
-  /**
-   * Button to go to the next page
-   * 
-   * @return
-   */
-  public GItem nextPage(InventoryMenu menu, Supplier<ItemStack> item) {
-    return GItem.builder()
-        .itemStackHandler(item)
-        .clickHandler(e -> {
-          if (isVertical()) {
-            setColOffset(getColOffset() + getLength());
-          } else {
-            setRowOffset(getRowOffset() + getHeight());
-          }
-
-          menu.update();
-        }).visibilityHandler(() -> {
-          if (isVertical()) {
-            return getColOffset() + 1 < getTotalCols();
-          } else {
-            return getRowOffset() + 1 < getTotalRows();
-          }
-        }).build();
+  public void nextPage() {
+    if (isVertical()) {
+      setColOffset(getColOffset() + getLength());
+    } else {
+      setRowOffset(getRowOffset() + getHeight());
+    }
   }
 
-  /**
-   * Button to go to the previous page
-   */
-  public GItem backPage(InventoryMenu menu, Supplier<ItemStack> item) {
-    return GItem.builder()
-        .itemStackHandler(item)
-        .clickHandler(e -> {
-          if (isVertical()) {
-            setColOffset(getColOffset() - getLength());
-          } else {
-            setRowOffset(getRowOffset() - getHeight());
-          }
+  public void nextCol() {
+    setColOffset(getColOffset() + 1);
+  }
 
-          menu.update();
-        }).visibilityHandler(() -> {
-          if (isVertical()) {
-            return getColOffset() - getLength() >= 0;
-          } else {
-            return getRowOffset() - getHeight() >= 0;
-          }
-        }).build();
+  public void nextRow() {
+    setRowOffset(getRowOffset() + 1);
+  }
+
+  public void previousPage() {
+    if (isVertical()) {
+      setColOffset(getColOffset() - getLength());
+    } else {
+      setRowOffset(getRowOffset() - getHeight());
+    }
+  }
+
+  public void previousCol() {
+    setColOffset(getColOffset() - 1);
+  }
+
+  public void previousRow() {
+    setRowOffset(getRowOffset() - 1);
+  }
+
+  public boolean hasNext() {
+    if (isVertical()) {
+      return getColOffset() + 1 < getTotalCols();
+    } else {
+      return getRowOffset() + 1 < getTotalRows();
+    }
+  }
+
+  public boolean hasPrevious() {
+    if (isVertical()) {
+      return getColOffset() - 1 >= 0;
+    } else {
+      return getRowOffset() - 1 >= 0;
+    }
   }
 
 }
