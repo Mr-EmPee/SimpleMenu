@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ml.empee.simplemenu.handlers.InventoryHandler;
@@ -35,7 +36,6 @@ public class InventoryMenu implements Menu {
   private final int rows;
 
   private Inventory inventory;
-
   private ItemStack[] content;
 
   protected String title = "";
@@ -49,8 +49,8 @@ public class InventoryMenu implements Menu {
       throw new IllegalStateException("Cannot update a menu that is not open");
     }
 
-    content = null;
-    inventory.setContents(getContent());
+    updateContent();
+    inventory.setContents(content);
   }
 
   /**
@@ -62,6 +62,11 @@ public class InventoryMenu implements Menu {
       throw new IllegalStateException("Menu must be open and must contain the pane");
     }
 
+    updateContent(pane, offset);
+    inventory.setContents(content);
+  }
+
+  private void updateContent(Pane pane, Slot offset) {
     for (int col = 0; col < pane.getLength(); col++) {
       for (int row = 0; row < pane.getHeight(); row++) {
         var item = pane.getItem(col, row).orElse(null);
@@ -71,15 +76,9 @@ public class InventoryMenu implements Menu {
         }
       }
     }
-
-    inventory.setContents(content);
   }
 
-  protected ItemStack[] getContent() {
-    if (content != null) {
-      return content;
-    }
-
+  private void updateContent() {
     content = new ItemStack[9 * rows];
 
     for (int col = 0; col < 9; col++) {
@@ -87,8 +86,6 @@ public class InventoryMenu implements Menu {
         content[(row * 9) + col] = getItem(col, row).getItemStack();
       }
     }
-
-    return content;
   }
 
   /**
@@ -112,13 +109,11 @@ public class InventoryMenu implements Menu {
   }
 
   public final void open() {
+    inventory = player.getServer().createInventory(null, 9 * rows, title);
     onOpen();
 
-    if (inventory == null) {
-      inventory = player.getServer().createInventory(null, 9 * rows, title);
-    }
-
-    inventory.setContents(getContent());
+    updateContent();
+    inventory.setContents(content);
     player.openInventory(inventory);
 
     InventoryHandler.register(player.getUniqueId(), this);

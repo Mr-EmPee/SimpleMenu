@@ -48,7 +48,7 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldPopulatePaneHorizontally() {
     var items = getItems();
-    var pane = ScrollPane.horizontal(3, 3, Slot.of(0, 0), 6);
+    var pane = ScrollPane.horizontal(3, 3, 6);
     pane.addAll(items);
 
     var content = pane.content;
@@ -92,7 +92,7 @@ class ScrollPaneTest extends Assertions {
   @Test
   void shouldPopulatePaneVertically() {
     var items = getItems();
-    var pane = ScrollPane.vertical(3, 3, Slot.of(0, 0), 6);
+    var pane = ScrollPane.vertical(3, 3, 6);
     pane.addAll(items);
 
     var content = pane.content;
