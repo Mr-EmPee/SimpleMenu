@@ -168,14 +168,6 @@ public class ScrollPane extends Pane {
     }
   }
 
-  public void nextCol() {
-    setColOffset(getColOffset() + 1);
-  }
-
-  public void nextRow() {
-    setRowOffset(getRowOffset() + 1);
-  }
-
   public void previousPage() {
     if (isVertical()) {
       setColOffset(getColOffset() - getLength());
@@ -184,35 +176,11 @@ public class ScrollPane extends Pane {
     }
   }
 
-  public void previousCol() {
-    setColOffset(getColOffset() - 1);
-  }
-
-  public void previousRow() {
-    setRowOffset(getRowOffset() - 1);
-  }
-
-  public boolean hasNext() {
-    if (isVertical()) {
-      return getColOffset() + 1 < getTotalCols();
-    } else {
-      return getRowOffset() + 1 < getTotalRows();
-    }
-  }
-
   public boolean hasNextPage() {
     if (isVertical()) {
       return getColOffset() + getLength() < getTotalCols();
     } else {
       return getRowOffset() + getHeight() < getTotalRows();
-    }
-  }
-
-  public boolean hasPrevious() {
-    if (isVertical()) {
-      return getColOffset() - 1 >= 0;
-    } else {
-      return getRowOffset() - 1 >= 0;
     }
   }
 
