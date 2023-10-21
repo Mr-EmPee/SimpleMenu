@@ -69,29 +69,29 @@ public class ScrollPane extends Pane {
 
   public void clear() {
     items.clear();
+
+    this.colOffset = 0;
+    this.rowOffset = 0;
+
     update();
   }
 
   public void set(List<GItem> items) {
     this.items.clear();
     this.items.addAll(items);
+
+    this.colOffset = 0;
+    this.rowOffset = 0;
+
     update();
   }
 
   public void setColOffset(int colOffset) {
-    if (colOffset < 0 || colOffset >= totalCols) {
-      throw new IllegalArgumentException("Col offset out of bounds");
-    }
-
     this.colOffset = colOffset;
     update();
   }
 
   public void setRowOffset(int rowOffset) {
-    if (rowOffset < 0 || rowOffset >= totalRows) {
-      throw new IllegalArgumentException("Col offset out of bounds");
-    }
-
     this.rowOffset = rowOffset;
     update();
   }
@@ -141,7 +141,7 @@ public class ScrollPane extends Pane {
 
   /**
    * @return the index of the item in the list
-   *         -1 if if the col or row is out of bounds
+   * -1 if if the col or row is out of bounds
    */
   private int getIndex(int col, int row) {
     int index = vertical ? (groupSize * col) + row : (groupSize * row) + col;
