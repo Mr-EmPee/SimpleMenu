@@ -1,15 +1,13 @@
 plugins {
   id("org.gradle.java-library")
   id("org.gradle.checkstyle")
-  id("maven-publish")
+  id("org.gradle.maven-publish")
 
   id("io.freefair.lombok") version "6.6.3"
-  id("com.github.johnrengelman.shadow") version "8.1.0"
 }
 
-group = "com.github.Mr-EmPee"
-version = "0.0.7"
-var basePackage = "ml.empee.simplemenu"
+group = "mr.empee"
+version = "develop"
 
 repositories {
   maven("https://oss.sonatype.org/content/repositories/snapshots/") //Spigot
@@ -27,19 +25,6 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
-java {
-  withSourcesJar()
-  withJavadocJar()
-
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
-}
-
-tasks.named<Test>("test") {
-  useJUnitPlatform()
-}
-
 publishing {
   publications {
     create<MavenPublication>("maven") {
@@ -54,11 +39,6 @@ checkstyle {
 }
 
 tasks {
-  shadowJar {
-    isEnableRelocation = true
-    relocationPrefix = "$basePackage.relocations"
-  }
-
   javadoc {
     options.encoding = Charsets.UTF_8.name()
   }
@@ -67,8 +47,19 @@ tasks {
     filteringCharset = Charsets.UTF_8.name()
   }
 
+  test {
+    useJUnitPlatform()
+  }
+
   java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+
+    withSourcesJar()
+    withJavadocJar()
+
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(17))
+    }
   }
 }
