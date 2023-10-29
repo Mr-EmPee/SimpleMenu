@@ -2,6 +2,7 @@ package ml.empee.simplemenu.model.menus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class InventoryMenu implements Menu {
   @Getter
   protected final Player player;
 
-  private final Map<Pane, Slot> panes = new HashMap<>();
+  private final Map<Pane, Slot> panes = new LinkedHashMap<>();
 
   private final int rows;
 
