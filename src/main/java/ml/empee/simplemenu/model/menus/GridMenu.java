@@ -74,7 +74,7 @@ public abstract class GridMenu implements Menu {
       for (int row = 0; row < pane.getHeight(); row++) {
         var item = pane.getItem(col, row).orElse(null);
         if (item != null && item.isVisible()) {
-          int index = ((row + offset.getRow()) * 9) + col + offset.getCol();
+          int index = ((row + offset.getRow()) * length) + col + offset.getCol();
           content[index] = item.getItemStack();
         }
       }
@@ -87,7 +87,7 @@ public abstract class GridMenu implements Menu {
 
     for (int col = 0; col < length; col++) {
       for (int row = 0; row < height; row++) {
-        content[(row * 9) + col] = getItem(col, row).getItemStack();
+        content[(row * length) + col] = getItem(col, row).getItemStack();
       }
     }
   }
