@@ -16,7 +16,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.RequiredArgsConstructor;
-import ml.empee.simplemenu.model.menus.InventoryMenu;
+import ml.empee.simplemenu.model.menus.GridMenu;
 
 /**
  * Handle operations of menus
@@ -25,10 +25,10 @@ import ml.empee.simplemenu.model.menus.InventoryMenu;
 @RequiredArgsConstructor
 public class InventoryHandler implements Listener {
 
-  private static final Map<UUID, InventoryMenu> inventories = new HashMap<>();
+  private static final Map<UUID, GridMenu> inventories = new HashMap<>();
   private final JavaPlugin plugin;
 
-  public static void register(UUID player, InventoryMenu menu) {
+  public static void register(UUID player, GridMenu menu) {
     inventories.put(player, menu);
   }
 
@@ -52,7 +52,7 @@ public class InventoryHandler implements Listener {
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClose(InventoryCloseEvent event) {
     var player = event.getPlayer().getUniqueId();
-    InventoryMenu menu = inventories.get(player);
+    GridMenu menu = inventories.get(player);
     if (menu == null) {
       return;
     }
@@ -64,7 +64,7 @@ public class InventoryHandler implements Listener {
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryClick(InventoryClickEvent event) {
     var player = event.getView().getPlayer().getUniqueId();
-    InventoryMenu menu = inventories.get(player);
+    GridMenu menu = inventories.get(player);
     if (menu == null) {
       return;
     }
@@ -81,7 +81,7 @@ public class InventoryHandler implements Listener {
   @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
   public void onInventoryDrag(InventoryDragEvent event) {
     var player = event.getView().getPlayer().getUniqueId();
-    InventoryMenu menu = inventories.get(player);
+    GridMenu menu = inventories.get(player);
     if (menu == null) {
       return;
     }
