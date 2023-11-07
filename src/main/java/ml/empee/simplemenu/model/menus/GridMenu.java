@@ -37,7 +37,6 @@ public abstract class GridMenu implements Menu {
   @Getter
   private final int height;
 
-  @Getter
   private Inventory inventory;
   private ItemStack[] content;
 
@@ -82,7 +81,6 @@ public abstract class GridMenu implements Menu {
   }
 
   private void updateContent() {
-    inventory = buildInventory();
     content = new ItemStack[inventory.getSize()];
 
     for (int col = 0; col < length; col++) {
@@ -113,13 +111,18 @@ public abstract class GridMenu implements Menu {
   }
 
   public Optional<ItemStack> getContent(int col, int row) {
+    if (inventory == null) {
+      return Optional.empty();
+    }
+
     return Optional.ofNullable(inventory.getItem((row * length) + col));
   }
 
   public final void open() {
     onOpen();
-
     updateContent();
+
+    inventory = buildInventory();
     inventory.setContents(content);
     player.openInventory(inventory);
 
