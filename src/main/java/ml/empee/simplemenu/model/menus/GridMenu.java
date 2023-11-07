@@ -119,10 +119,11 @@ public abstract class GridMenu implements Menu {
   }
 
   public final void open() {
+    inventory = buildInventory();
+
     onOpen();
     updateContent();
 
-    inventory = buildInventory();
     inventory.setContents(content);
     player.openInventory(inventory);
 
