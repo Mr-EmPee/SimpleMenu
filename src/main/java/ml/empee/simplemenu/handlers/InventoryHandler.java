@@ -57,7 +57,12 @@ public class InventoryHandler implements Listener {
       return;
     }
 
-    menu.onClose();
+    try {
+      menu.onClose();
+    } catch (Exception e) {
+      menu.handleException(e);
+    }
+
     inventories.remove(player);
   }
 
@@ -69,12 +74,21 @@ public class InventoryHandler implements Listener {
       return;
     }
 
-    menu.onClick(event);
+    try {
+      menu.onClick(event);
+    } catch (Exception e) {
+      menu.handleException(e);
+    }
+
     if (event.getView().getTopInventory() == event.getClickedInventory()) {
       int col = event.getSlot() % 9;
       int row = event.getSlot() / 9;
 
-      menu.getItem(col, row).onClick(event);
+      try {
+        menu.getItem(col, row).onClick(event);
+      } catch (Exception e) {
+        menu.handleException(e);
+      }
     }
   }
 
@@ -86,7 +100,11 @@ public class InventoryHandler implements Listener {
       return;
     }
 
-    menu.onDrag(event);
+    try {
+      menu.onDrag(event);
+    } catch (Exception e) {
+      menu.handleException(e);
+    }
   }
 
 }

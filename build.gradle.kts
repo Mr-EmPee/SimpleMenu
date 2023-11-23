@@ -1,6 +1,5 @@
 plugins {
   id("org.gradle.java-library")
-  id("org.gradle.checkstyle")
   id("org.gradle.maven-publish")
 
   id("io.freefair.lombok") version "6.6.3"
@@ -31,11 +30,6 @@ publishing {
       from(components["java"])
     }
   }
-}
-
-checkstyle {
-  toolVersion = "10.10.0"
-  configFile = file("$projectDir/checkstyle.xml")
 }
 
 tasks {

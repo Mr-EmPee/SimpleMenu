@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -134,6 +135,11 @@ public abstract class GridMenu implements Menu {
   }
 
   public void onClose() {
+  }
+
+  @SneakyThrows
+  public void handleException(Exception e) {
+    throw e;
   }
 
   public void onClick(InventoryClickEvent event) {
